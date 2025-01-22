@@ -1,0 +1,989 @@
+{
+    "Need an API key ?": "http://arno.cl/lmon",
+    "sources": [
+        {
+            "name": "Île-de-France Mobilités",
+            "url": "https://www.iledefrance-mobilites.fr/"
+        }
+    ],
+    "data": {
+        "line": {
+            "id": "line:IDFM:C00632",
+            "number": "2234",
+            "backgroundColor": "640082",
+            "textColor": "ffffff",
+            "shape": "rectangle-filled",
+            "illustration": "https://transportsapp-cdn-1.arno.cl/fr-idf/BUS_DEFAULT.png",
+            "picto": "https://transportsapp-cdn-1.arno.cl/fr-idf/pictos/Bus.png",
+            "importance": 9,
+            "isOnRoad": true,
+            "modeSvg": "<svg width=\"30\" height=\"30\" viewBox=\"0 0 30 30\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><g clip-path=\"url(#clip0_271_2768)\"><mask id=\"mask0_271_2768\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"30\" height=\"30\"><path d=\"M0 0H30V30H0V0Z\" fill=\"white\"/></mask><g mask=\"url(#mask0_271_2768)\"><path d=\"M25.839 17.063C25.839 15.525 24.975 14.628 23.889 14.025L23.063 13.575C22.576 13.312 22.163 12.9 22.163 12.375C22.163 11.775 22.651 11.362 23.363 11.362C23.851 11.362 24.3 11.55 24.633 11.7C25.163 11.962 25.497 11.625 25.646 11.065C25.834 10.43 25.571 10.202 25.116 9.977C24.5765 9.72606 23.988 9.59798 23.393 9.602C21.63 9.602 20.167 10.766 20.167 12.64C20.167 14.102 20.917 14.927 22.117 15.603L22.987 16.087C23.517 16.387 23.851 16.799 23.851 17.357C23.851 18.07 23.176 18.407 22.501 18.407C21.971 18.407 21.336 18.182 21 18.032C20.438 17.769 20.138 18.107 19.95 18.707C19.764 19.342 20.063 19.607 20.55 19.832C21 20.058 21.788 20.245 22.5 20.245C24.338 20.245 25.839 19.007 25.839 17.057V17.063ZM19.277 16.682V10.462C19.277 9.933 18.747 9.675 18.264 9.675C17.734 9.675 17.251 9.938 17.251 10.463V16.425C17.251 17.625 16.876 18.412 15.901 18.412C14.964 18.412 14.514 17.662 14.514 16.425V10.463C14.514 9.933 13.951 9.675 13.464 9.675C12.901 9.675 12.414 9.938 12.414 10.463V16.65C12.414 19.125 13.652 20.248 15.906 20.248C17.931 20.248 19.281 19.084 19.281 16.685L19.277 16.682ZM11.443 17.136C11.443 15.41 10.243 14.772 9.606 14.66V14.623C10.355 14.247 11.256 13.535 11.256 12.26C11.256 10.536 9.756 9.71 8.292 9.71H5.475C4.945 9.71 4.65 10.123 4.65 10.573V19.347C4.65 19.877 5.18 20.136 5.663 20.136H8.325C9.938 20.136 11.438 19.272 11.438 17.136H11.443ZM9.15 12.75C9.15 13.724 8.324 14.062 7.461 14.062H6.674V11.437H7.461C8.361 11.437 9.15 11.737 9.15 12.75ZM9.45 16.912C9.45 17.925 8.89 18.415 7.687 18.415H6.787V15.488H7.687C8.437 15.488 9.45 15.75 9.45 16.912ZM29.025 0H0.975C0.716414 0 0.468419 0.102723 0.285571 0.285571C0.102723 0.468419 0 0.716414 0 0.975C0 1.23359 0.102723 1.48158 0.285571 1.66443C0.468419 1.84728 0.716414 1.95 0.975 1.95H29.025C29.2832 1.95 29.5309 1.84755 29.7137 1.66514C29.8965 1.48272 29.9995 1.23524 30 0.977V0.975C30 0.846961 29.9748 0.720176 29.9258 0.601884C29.8768 0.483591 29.805 0.376108 29.7144 0.285571C29.6239 0.195034 29.5164 0.123216 29.3981 0.0742175C29.2798 0.0252191 29.153 0 29.025 0ZM29.025 28.05H0.975C0.716414 28.05 0.468419 28.1527 0.285571 28.3356C0.102723 28.5184 0 28.7664 0 29.025C0 29.2836 0.102723 29.5316 0.285571 29.7144C0.468419 29.8973 0.716414 30 0.975 30H29.025C29.2832 30 29.5309 29.8976 29.7137 29.7151C29.8965 29.5327 29.9995 29.2852 30 29.027V29.025C29.9997 28.7666 29.8969 28.5189 29.7141 28.3362C29.5313 28.1536 29.2834 28.051 29.025 28.051V28.05Z\" fill=\"#25303B\"/></g></g><defs><clipPath id=\"clip0_271_2768\"><rect width=\"30\" height=\"30\" fill=\"white\"/></clipPath></defs></svg>",
+            "numberShapeSvg": "<svg width=\"51.199999999999996\" height=\"32\" viewBox=\"0 0 51.199999999999996 32\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"0\" rx=\"5\" ry=\"5\" height=\"32\" width=\"51.199999999999996\" fill=\"#640082\"/><text x=\"25.599999999999998\" y=\"22.299999999999997\" text-anchor=\"middle\" font-size=\"18\" font-family=\"Arial Rounded MT Bold, Arial, sans-serif\" font-weight=\"normal\" fill=\"#ffffff\">2234</text></svg>"
+        },
+        "stops": [
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68385",
+                    "name": "Marne-la-Vallée Chessy",
+                    "averagePosition": [
+                        48.871034,
+                        2.783909
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:417792",
+                            "position": [
+                                48.871034,
+                                2.783909
+                            ],
+                            "name": "Chessy Nord - Quai K",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:45:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:45:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68351",
+                    "name": "Séquoia Lodge",
+                    "averagePosition": [
+                        48.870656,
+                        2.793849
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15587",
+                            "position": [
+                                48.870656,
+                                2.793849
+                            ],
+                            "name": "Séquoia Lodge",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:47:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:47:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68425",
+                    "name": "Hôtels du Val de France / Explorer",
+                    "averagePosition": [
+                        48.876935,
+                        2.805508
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:426628",
+                            "position": [
+                                48.876935,
+                                2.805508
+                            ],
+                            "name": "Hôtels du Val de France",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:49:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:49:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68440",
+                    "name": "La Boucle Des Trois Ormes",
+                    "averagePosition": [
+                        48.877199,
+                        2.813115
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15644",
+                            "position": [
+                                48.877199,
+                                2.813115
+                            ],
+                            "name": "La Boucle des Trois Ormes",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:51:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:51:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:417799",
+                    "name": "Coulée Verte",
+                    "averagePosition": [
+                        48.87274,
+                        2.814317
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:417800",
+                            "position": [
+                                48.87274,
+                                2.814317
+                            ],
+                            "name": "Coulée Verte",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:52:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:52:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68360",
+                    "name": "Collège Jacqueline de Romilly",
+                    "averagePosition": [
+                        48.868806,
+                        2.811728
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15602",
+                            "position": [
+                                48.868806,
+                                2.811728
+                            ],
+                            "name": "Collège Jacqueline de Romilly",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:53:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:53:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68335",
+                    "name": "ZAC du Centre",
+                    "averagePosition": [
+                        48.86708,
+                        2.812306
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15604",
+                            "position": [
+                                48.86708,
+                                2.812306
+                            ],
+                            "name": "ZAC du Centre",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:54:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:54:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68339",
+                    "name": "Clé des Champs",
+                    "averagePosition": [
+                        48.867544,
+                        2.815754
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15582",
+                            "position": [
+                                48.867544,
+                                2.815754
+                            ],
+                            "name": "Clé des Champs",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:55:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:55:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68302",
+                    "name": "La Boiserie",
+                    "averagePosition": [
+                        48.862476,
+                        2.818034
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15720",
+                            "position": [
+                                48.862476,
+                                2.818034
+                            ],
+                            "name": "La Boiserie",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T16:59:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T16:59:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68283",
+                    "name": "Pré de Bray / Le Verger",
+                    "averagePosition": [
+                        48.859233,
+                        2.814543
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15212",
+                            "position": [
+                                48.859233,
+                                2.814543
+                            ],
+                            "name": "Pré de Bray",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:00:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:00:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68251",
+                    "name": "L'Orme Rond",
+                    "averagePosition": [
+                        48.853238,
+                        2.816881
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15576",
+                            "position": [
+                                48.853238,
+                                2.816881
+                            ],
+                            "name": "L'Orme Rond",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:02:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:02:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68230",
+                    "name": "Les Genêts",
+                    "averagePosition": [
+                        48.852097,
+                        2.81807
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15559",
+                            "position": [
+                                48.852097,
+                                2.81807
+                            ],
+                            "name": "Les Genêts",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:02:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:02:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68209",
+                    "name": "Place de l'Europe",
+                    "averagePosition": [
+                        48.850158,
+                        2.820326
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15589",
+                            "position": [
+                                48.850158,
+                                2.820326
+                            ],
+                            "name": "Place de l'Europe",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:03:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:03:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68207",
+                    "name": "Gymnase",
+                    "averagePosition": [
+                        48.849993,
+                        2.824455
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15608",
+                            "position": [
+                                48.849993,
+                                2.824455
+                            ],
+                            "name": "Gymnase",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:04:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:04:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68196",
+                    "name": "Boulevard des Artisans",
+                    "averagePosition": [
+                        48.848768,
+                        2.829229
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:11071",
+                            "position": [
+                                48.848768,
+                                2.829229
+                            ],
+                            "name": "Boulevard des Artisans",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:06:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:06:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:480626",
+                    "name": "Place de la Mairie",
+                    "averagePosition": [
+                        48.846727,
+                        2.823199
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:10493",
+                            "position": [
+                                48.846727,
+                                2.823199
+                            ],
+                            "name": "Place de la Mairie",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:07:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:07:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68171",
+                    "name": "École des Girandoles",
+                    "averagePosition": [
+                        48.846081,
+                        2.818269
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:10492",
+                            "position": [
+                                48.846081,
+                                2.818269
+                            ],
+                            "name": "École des Girandoles",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:08:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:08:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68185",
+                    "name": "Rue de Bellesmes",
+                    "averagePosition": [
+                        48.847364,
+                        2.816084
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15667",
+                            "position": [
+                                48.847364,
+                                2.816084
+                            ],
+                            "name": "Rue de Bellesmes",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:09:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:09:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68192",
+                    "name": "Armières",
+                    "averagePosition": [
+                        48.848959,
+                        2.812208
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15557",
+                            "position": [
+                                48.848959,
+                                2.812208
+                            ],
+                            "name": "Armières",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:10:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:10:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68167",
+                    "name": "Centre Aquatique",
+                    "averagePosition": [
+                        48.844993,
+                        2.80154
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:22491",
+                            "position": [
+                                48.844993,
+                                2.80154
+                            ],
+                            "name": "Centre Aquatique",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:13:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:13:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68150",
+                    "name": "Robert Thiboust",
+                    "averagePosition": [
+                        48.843219,
+                        2.794638
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15577",
+                            "position": [
+                                48.843219,
+                                2.794638
+                            ],
+                            "name": "Robert Thiboust",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:15:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:15:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68139",
+                    "name": "Pressoir-Parc D'Entreprises",
+                    "averagePosition": [
+                        48.841564,
+                        2.789413
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15579",
+                            "position": [
+                                48.841564,
+                                2.789413
+                            ],
+                            "name": "Pressoir-Parc d'Entreprises",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:16:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:16:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68138",
+                    "name": "Les Pléïades",
+                    "averagePosition": [
+                        48.841393,
+                        2.784059
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15250",
+                            "position": [
+                                48.841393,
+                                2.784059
+                            ],
+                            "name": "Les Pléïades",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:18:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:18:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68169",
+                    "name": "Place Thomas le Pileur",
+                    "averagePosition": [
+                        48.84559,
+                        2.782665
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15316",
+                            "position": [
+                                48.84559,
+                                2.782665
+                            ],
+                            "name": "Place Thomas le Pileur",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:20:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:20:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68211",
+                    "name": "Collège Madeleine Renaud / Les Marmousets",
+                    "averagePosition": [
+                        48.850553,
+                        2.786924
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15248",
+                            "position": [
+                                48.850553,
+                                2.786924
+                            ],
+                            "name": "Les Marmousets",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:23:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:23:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68235",
+                    "name": "Garonne",
+                    "averagePosition": [
+                        48.852701,
+                        2.786193
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15642",
+                            "position": [
+                                48.852701,
+                                2.786193
+                            ],
+                            "name": "Garonne",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:24:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:24:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68267",
+                    "name": "Hôtel de Ville",
+                    "averagePosition": [
+                        48.856421,
+                        2.784147
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:15660",
+                            "position": [
+                                48.856421,
+                                2.784147
+                            ],
+                            "name": "Hôtel de Ville",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:26:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:26:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68269",
+                    "name": "Lycée Emilie du Châtelet",
+                    "averagePosition": [
+                        48.856763,
+                        2.779416
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:21147",
+                            "position": [
+                                48.856763,
+                                2.779416
+                            ],
+                            "name": "Lycée Emilie du Châtelet",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:27:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:27:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            },
+            {
+                "stop": {
+                    "id": "stop_area:IDFM:68266",
+                    "name": "Val d'Europe",
+                    "averagePosition": [
+                        48.855205,
+                        2.773603
+                    ],
+                    "stops": [
+                        {
+                            "id": "stop_point:IDFM:412423",
+                            "position": [
+                                48.855205,
+                                2.773603
+                            ],
+                            "name": "Gare de Val d'Europe",
+                            "lines": [
+                                "line:IDFM:C00632"
+                            ]
+                        }
+                    ]
+                },
+                "arrivesAt": {
+                    "theoretical": "2025-01-21T17:31:00.000Z",
+                    "canceled": false
+                },
+                "leavesAt": {
+                    "theoretical": "2025-01-21T17:31:00.000Z",
+                    "canceled": false
+                },
+                "isSkipped": false,
+                "isClosed": false
+            }
+        ],
+        "journeyId": "vehicle_journey:IDFM:TRANSDEV_MARNE_LA_VALLEE:167083-C00632-19498071",
+        "congestion": null,
+        "disruptions": []
+    },
+    "crowdsourcing": {
+        "userReports": []
+    }
+}
