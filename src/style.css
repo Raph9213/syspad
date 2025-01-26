@@ -1,0 +1,25 @@
+body,
+html {
+    overflow: hidden;
+}
+
+body {
+    background-color: #F3EDEA;
+    font-family: Parisine, Arial, Helvetica, sans-serif;
+}
+
+@font-face {
+    font-family: 'Parisine';
+    font-weight: bold;
+    src: url('/Parisine-Bold.otf');
+}
+
+@font-face {
+    font-family: 'Parisine';
+    font-weight: normal;
+    src: url('/Parisine-Regular.otf');
+}
+
+:root {
+    --title-color: #1C55B1;
+}

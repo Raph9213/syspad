@@ -31,6 +31,12 @@ export interface SimpleDeparture {
   vehicleLength?: "SHORT" | "LONG";
 }
 
+export type SimpleJourney = {
+  line: SimpleLine;
+  userStopDeparture: SimpleDeparture;
+  stops: SimpleStop[];
+};
+
 function processSVG(svg: string): string {
   return svg
     .replace(/width="[^"]+"/, "")
@@ -149,7 +155,9 @@ export class Wagon {
     });
   }
 
-  public static async journey(journeyId: string): Promise<SimpleStop[]> {
+  public static async journey(
+    journeyId: string
+  ): Promise<{ stops: SimpleStop[]; line: SimpleLine }> {
     let params = new URLSearchParams();
 
     params.append("action", "journey");
@@ -166,8 +174,12 @@ export class Wagon {
 
     const json = await response.json();
 
-    return json.data.stops.map((stop: any) => {
+    const stops = json.data.stops.map((stop: any) => {
       return this.stopFromDTO(stop.stop, []);
     });
+
+    const line = this.lineFromDTO(json.data.line);
+
+    return { stops, line };
   }
 }

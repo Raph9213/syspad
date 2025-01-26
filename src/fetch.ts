@@ -1,8 +1,8 @@
 import { Graph } from "./app/Graph";
 import { firstUnique } from "./app/utils";
-import { Wagon, type SimpleStop } from "./services/Wagon";
+import { Wagon, type SimpleJourney, type SimpleStop } from "./services/Wagon";
 
-export async function nextTrainGraph(): Promise<Graph<SimpleStop>> {
+export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
   const CHATELET = "stop_area:IDFM:474151";
   const JUVISY = "stop_area:IDFM:478505";
   const RER_A = "line:IDFM:C01742";
@@ -18,14 +18,20 @@ export async function nextTrainGraph(): Promise<Graph<SimpleStop>> {
     departures.filter((x) => x.branchHash === "1")
   );
 
-  for (const { id } of first) {
-    const stops = await Wagon.journey(id);
-    const stopsFromOrigin = stops.slice(
-      stops.findIndex((x) => x.id === ORIGIN)
+  const result = [];
+
+  for (const departure of first) {
+    const journey = await Wagon.journey(departure.id);
+    const stopsFromOrigin = journey.stops.slice(
+      journey.stops.findIndex((x) => x.id === ORIGIN)
     );
     console.log(stopsFromOrigin.map((x) => x.name).join(" -> "));
-    graph.add(stopsFromOrigin);
+    result.push({
+      userStopDeparture: departure,
+      stops: stopsFromOrigin,
+      line: journey.line,
+    });
   }
 
-  return graph;
+  return result;
 }

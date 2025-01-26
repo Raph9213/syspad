@@ -1,41 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
-import { nextTrainGraph } from "./fetch";
+import { onMounted, ref } from "vue";
+import Stops from "./components/Stops.vue";
+import { nextTrainJourneys } from "./fetch";
+import type { SimpleJourney } from "./services/Wagon";
 
-const data = ref([]);
+const journeys = ref<SimpleJourney[] | null>(null);
 
 onMounted(async () => {
-  const graph = await nextTrainGraph();
-  console.log(
-    graph
-      .groupedTopologicalSort()
-      .map((group) => group.map((stop) => stop.name))
-  );
-  data.value = graph.groupedTopologicalSort();
+  journeys.value = await nextTrainJourneys();
 });
 </script>
 
 <template>
-  <div class="groups">
-    <div class="stops" v-for="group in data">
-      <div v-for="stop in group">
-        <span>{{ stop.name }}</span>
-      </div>
-    </div>
-  </div>
+  <Stops v-if="journeys" :journeys="journeys"></Stops>
 </template>
-
-<style scoped>
-.groups {
-  display: flex;
-  gap: 56px;
-  height: 300px;
-}
-
-.stops {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-</style>
