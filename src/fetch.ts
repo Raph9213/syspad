@@ -7,15 +7,15 @@ export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
   const JUVISY = "stop_area:IDFM:478505";
   const RER_A = "line:IDFM:C01742";
   const RER_D = "line:IDFM:C01728";
-  const ORIGIN = JUVISY;
+  const ORIGIN = CHATELET;
   const graph = new Graph<SimpleStop>((x) => x.id);
 
-  const departures = await Wagon.departures(RER_D, [ORIGIN]);
+  const departures = await Wagon.departures(RER_A, [ORIGIN]);
 
   const first = firstUnique(
     3,
     (x) => x.journeyCode?.slice(0, 2) || "",
-    departures.filter((x) => x.branchHash === "1")
+    departures.filter((x) => x.branchHash === "0")
   );
 
   const result = [];

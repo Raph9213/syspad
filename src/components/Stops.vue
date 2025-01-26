@@ -29,6 +29,16 @@ const stops = computed<Graph<SimpleStop>>(() => {
   return graph;
 });
 
+const nextDesservedStops = computed(() => {
+  const stops = new Set<SimpleStop["id"]>();
+
+  for (const stop of props.journeys.at(0)?.stops ?? []) {
+    stops.add(stop.id);
+  }
+
+  return stops;
+});
+
 const line = computed(() => props.journeys.at(0)?.line);
 
 watch(
@@ -71,8 +81,13 @@ watch(
     ></AnimatedPath>
   </div>
   <div class="groups">
-    <div class="stops" v-for="group in stops.groupedTopologicalSort()">
-      <div class="stop" v-for="stop in group">
+    <div class="stops" v-for="(group, i) in stops.groupedTopologicalSort()">
+      <div
+        class="stop"
+        v-for="stop in group"
+        :class="{ active: nextDesservedStops.has(stop.id) }"
+        :style="{ '--animation-delay': `${i * 0.3 + 2}s` }"
+      >
         <span class="label" aria-hidden="true" style="visibility: hidden">{{
           stop.name
         }}</span>
@@ -105,6 +120,8 @@ watch(
 
 .stop {
   position: relative;
+  animation: stopAppear 0.4s ease-out var(--animation-delay) forwards;
+  opacity: 0;
 }
 
 .stop:only-child {
@@ -128,6 +145,25 @@ watch(
   font-size: 5vh;
   font-weight: bold;
   color: var(--title-color);
+  animation: labelAppear 0.4s ease-out var(--animation-delay);
+}
+
+@keyframes stopAppear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes labelAppear {
+  from {
+    scale: 1.1;
+  }
+  to {
+    scale: 1;
+  }
 }
 
 .stop .label.decorative {
@@ -136,5 +172,9 @@ watch(
   position: absolute;
   transform-origin: top;
   transform: translateY(-12vh) rotate(240deg);
+}
+
+.stop:not(.active) .label {
+  opacity: 0.7;
 }
 </style>
