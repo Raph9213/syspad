@@ -26,8 +26,6 @@ const pathLength = computed(() => {
 });
 
 const path = computed(() => {
-  console.log(props.points);
-
   const d = props.points.map((point, i) => {
     const command = i === 0 ? "M" : "L";
     // If SVG is straight, gradient is not visible

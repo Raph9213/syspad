@@ -10,20 +10,20 @@ export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
   const ORIGIN = CHATELET;
   const graph = new Graph<SimpleStop>((x) => x.id);
 
-  const departures = await Wagon.departures(RER_A, [ORIGIN]);
+  const departures = await Wagon.departures(RER_D, [ORIGIN]);
 
   const first = firstUnique(
     3,
     (x) => x.journeyCode?.slice(0, 2) || "",
-    departures.filter((x) => x.branchHash === "0")
+    departures.filter((x) => x.branchHash === "1")
   );
 
   const result = [];
 
-  for (const departure of first) {
+  for (const [i, departure] of first.entries()) {
     const journey = await Wagon.journey(departure.id);
     const stopsFromOrigin = journey.stops.slice(
-      journey.stops.findIndex((x) => x.id === ORIGIN)
+      journey.stops.findIndex((x) => x.id === ORIGIN) - (i === 0 ? 0 : 1)
     );
     console.log(stopsFromOrigin.map((x) => x.name).join(" -> "));
     result.push({

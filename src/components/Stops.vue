@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
-import type { SimpleJourney, SimpleStop } from "../services/Wagon";
-import { Graph } from "../app/Graph";
-import AnimatedPath from "./AnimatedPath.vue";
 import { promiseTimeout } from "@vueuse/core";
+import { computed, ref, watch } from "vue";
+import { Graph } from "../app/Graph";
 import { getFixedPosition } from "../layout";
+import type { SimpleJourney, SimpleStop } from "../services/Wagon";
+import AnimatedPath from "./AnimatedPath.vue";
 
 const props = defineProps<{
   journeys: SimpleJourney[];
@@ -80,13 +80,29 @@ watch(
       v-for="(path, i) in paths"
     ></AnimatedPath>
   </div>
-  <div class="groups">
+  <div
+    class="groups"
+    :style="{ '--line-color': '#' + (line?.backgroundColor ?? '000000') }"
+  >
     <div class="stops" v-for="(group, i) in stops.groupedTopologicalSort()">
       <div
         class="stop"
         v-for="stop in group"
-        :class="{ active: nextDesservedStops.has(stop.id) }"
-        :style="{ '--animation-delay': `${i * 0.3 + 2}s` }"
+        :class="{
+          active: nextDesservedStops.has(stop.id),
+          hidden: i === 0,
+          origin: stop.id === nextDesservedStops.values().next().value,
+          terminus: stop.id === [...nextDesservedStops.values()].at(-1),
+        }"
+        :style="{
+          '--animation-delay': `${
+            nextDesservedStops.has(stop.id)
+              ? i * 0.3 + 1
+              : (nextDesservedStops.size ?? 0) * 0.3 + 2.5
+          }s`,
+          '--group-count': group.length,
+          '--position': i,
+        }"
       >
         <span class="label" aria-hidden="true" style="visibility: hidden">{{
           stop.name
@@ -103,11 +119,11 @@ watch(
 .groups {
   transform: translateY(-10%);
   position: relative;
-  padding: 2vh 0;
+  padding-left: 8vh;
   display: flex;
   /* gap: 3.6vw; */
   height: 100vh;
-  width: calc(100vw - 20vh);
+  width: calc(100vw - 32vh);
   justify-content: space-between;
   z-index: 99;
 }
@@ -116,6 +132,7 @@ watch(
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: -10vh;
 }
 
 .stop {
@@ -129,23 +146,53 @@ watch(
 }
 
 .dot {
+  position: relative;
   width: 4.5vh;
   height: 4.5vh;
   background-color: white;
   border-radius: 50%;
-  margin: 0 auto;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
+  z-index: 99;
+}
+
+.stop.active.terminus .dot {
+  background-color: var(--line-color);
 }
 
 .stop .label {
+  --label-font-size: 5vh;
   transform-origin: left;
   writing-mode: vertical-rl;
   text-orientation: mixed;
+  font-size: var(--label-font-size);
   height: 40vh;
-  font-size: 5vh;
   font-weight: bold;
   color: var(--title-color);
-  animation: labelAppear 0.4s ease-out var(--animation-delay);
+}
+
+.stop:not(:first-child) {
+  margin-top: calc(-10vh * var(--position));
+}
+
+.stop.hidden:not(.active) {
+  visibility: hidden;
+}
+
+.stop.active.origin .label.decorative,
+.stop.active.terminus .label.decorative {
+  border-radius: 999px;
+  z-index: 1;
+}
+
+.stop.active.origin .label.decorative {
+  background-color: var(--title-color);
+  color: white;
+  box-shadow: 0 0 0 1vh var(--title-color);
+}
+
+.stop.active.terminus .label.decorative {
+  background-color: white;
+  box-shadow: 0 0 0 1vh white;
 }
 
 @keyframes stopAppear {
@@ -171,7 +218,8 @@ watch(
   left: 0;
   position: absolute;
   transform-origin: top;
-  transform: translateY(-12vh) rotate(240deg);
+  transform: translateY(-12vh) translateX(-4vh) rotate(240deg);
+  animation: labelAppear 0.4s ease-out var(--animation-delay);
 }
 
 .stop:not(.active) .label {
