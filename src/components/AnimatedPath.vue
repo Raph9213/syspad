@@ -26,10 +26,36 @@ const pathLength = computed(() => {
 });
 
 const path = computed(() => {
-  const d = props.points.map((point, i) => {
+  const offsetX = height.value / 8;
+
+  const d = props.points.flatMap((point, i) => {
     const command = i === 0 ? "M" : "L";
-    // If SVG is straight, gradient is not visible
-    return `${command} ${point.x} ${point.y + (i === 0 ? 0.0001 : 0)}`;
+    const prevPoint = props.points[i - 1];
+    const nextPoint = props.points[i + 1];
+
+    // Ajoute un offsetX leading seulement si le précédent point a un Y différent
+    const leading =
+      prevPoint && prevPoint.y !== point.y
+        ? `${command} ${point.x - offsetX} ${point.y}`
+        : null;
+
+    const middle = `${command} ${point.x} ${point.y}`;
+
+    // Ajoute un offsetX trailing seulement si le prochain point a un Y différent
+    const trailing =
+      nextPoint && nextPoint.y !== point.y
+        ? `L ${point.x + offsetX} ${point.y}`
+        : null;
+
+    if (i === 0) {
+      return [middle, trailing].filter(Boolean);
+    }
+
+    if (i === props.points.length - 1) {
+      return [leading, middle].filter(Boolean);
+    }
+
+    return [leading, middle, trailing].filter(Boolean);
   });
 
   return d.join(" ");

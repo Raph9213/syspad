@@ -113,7 +113,7 @@ watch(
             stop.name
           }}</span>
           <span class="label decorative">{{ stop.name }}</span> -->
-          <div :id="stop.id"></div>
+          <div class="anchor" :id="stop.id"></div>
           <div class="dot"></div>
           <p style="height: 5vh; width: 100%">{{ stop.name }}</p>
         </div>
@@ -129,7 +129,7 @@ watch(
   position: relative;
   padding-left: 8vh;
   display: flex;
-  gap: 15vh;
+  gap: 25vh;
   height: 85vh;
   width: calc(100vw - 32vh);
   justify-content: space-between;
