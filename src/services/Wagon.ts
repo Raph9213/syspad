@@ -40,7 +40,8 @@ export type SimpleJourney = {
 function processSVG(svg: string): string {
   return svg
     .replace(/width="[^"]+"/, "")
-    .replace(/height="[^"]+"/, `height="100%"`);
+    .replace(/height="[^"]+"/, `height="100%"`)
+    .replace('font-family="', 'font-weight="bold" font-family="Parisine, ');
 }
 
 export class Wagon {
@@ -147,7 +148,11 @@ export class Wagon {
       .map((departure: any) => {
         return {
           destination: departure.destinationLabel,
-          leavesAt: dayjs(departure.departure.realTime || "invalid"),
+          leavesAt: dayjs(
+            departure.departure.realTime ||
+              departure.departure.theoretical ||
+              "invalid"
+          ),
           id: departure.journeyId,
           branchHash: departure.branchHash,
           journeyCode: departure.journeyCode,

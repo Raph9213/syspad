@@ -11,7 +11,6 @@ const props = defineProps<{
 const remainingMinutes = ref(-1);
 
 useIntervalFn(() => {
-  console.log(props.departure);
   remainingMinutes.value = props.departure.leavesAt.diff(dayjs(), "minute");
 }, 1000);
 </script>
@@ -28,7 +27,7 @@ useIntervalFn(() => {
         <label>min</label>
       </div>
     </div>
-    <div class="journeyCode">
+    <div class="journeyCode" v-if="departure.journeyCode">
       <span>{{ departure.journeyCode }}</span>
     </div>
   </div>
@@ -61,6 +60,7 @@ h1 {
   margin: 0;
   font-size: 9vh;
   color: var(--title-color);
+  min-width: 40vh;
 }
 
 .minutes {

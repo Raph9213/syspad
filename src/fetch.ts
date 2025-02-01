@@ -1,25 +1,20 @@
-import { Graph } from "./app/Graph";
 import { firstUnique } from "./app/utils";
-import { Wagon, type SimpleJourney, type SimpleStop } from "./services/Wagon";
+import { Wagon, type SimpleJourney } from "./services/Wagon";
 
 export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
-  const CHATELET = "stop_area:IDFM:474151";
-  const JUVISY = "stop_area:IDFM:478505";
-  const NANTERRE_PREFECTURE = "stop_area:IDFM:70945";
-  const RER_A = "line:IDFM:C01742";
-  const RER_B = "line:IDFM:C01743";
-  const RER_C = "line:IDFM:C01727";
-  const RER_D = "line:IDFM:C01728";
-  const ORIGIN = CHATELET;
-  const graph = new Graph<SimpleStop>((x) => x.id);
+  const [ORIGIN, _, LINE] = "stop_area:IDFM:71410/line/line:IDFM:C01743".split(
+    "/"
+  );
 
-  const departures = await Wagon.departures(RER_A, [ORIGIN]);
+  const departures = await Wagon.departures(LINE, [ORIGIN]);
 
   const first = firstUnique(
     3,
-    (x) => x.journeyCode?.slice(0, 2) || "",
-    departures.filter((x) => x.branchHash === "1")
+    (x) => x.journeyCode?.slice(0, 2) || x.destination,
+    departures.filter((x) => x.branchHash === "0")
   );
+
+  console.log(first);
 
   const result = [];
 
