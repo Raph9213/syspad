@@ -42,8 +42,12 @@ const nextDesservedStops = computed(() => {
 
 const line = computed(() => props.journeys.at(0)?.line);
 
-function northToSouth(a: SimpleStop[], b: SimpleStop[]) {
-  return a[0].position.lat - b[0].position.lat;
+function meanLatitude(stops: SimpleStop[]): number {
+  return stops.reduce((acc, stop) => acc + stop.position.lat, 0) / stops.length;
+}
+
+function northToSouth(a: SimpleStop[], b: SimpleStop[]): number {
+  return meanLatitude(b) - meanLatitude(a);
 }
 
 watch(

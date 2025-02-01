@@ -10,7 +10,7 @@ export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
   const RER_B = "line:IDFM:C01743";
   const RER_C = "line:IDFM:C01727";
   const RER_D = "line:IDFM:C01728";
-  const ORIGIN = NANTERRE_PREFECTURE;
+  const ORIGIN = CHATELET;
   const graph = new Graph<SimpleStop>((x) => x.id);
 
   const departures = await Wagon.departures(RER_A, [ORIGIN]);
