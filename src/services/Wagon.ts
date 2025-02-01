@@ -143,16 +143,21 @@ export class Wagon {
 
     const json = await response.json();
 
-    return json.data.departures.map((departure: any) => {
-      return {
-        destination: departure.destinationLabel,
-        leavesAt: dayjs(departure.departure.realTime || "invalid"),
-        id: departure.journeyId,
-        branchHash: departure.branchHash,
-        journeyCode: departure.journeyCode,
-        vehicleLength: departure.vehicleLength,
-      };
-    });
+    return json.data.departures
+      .map((departure: any) => {
+        return {
+          destination: departure.destinationLabel,
+          leavesAt: dayjs(departure.departure.realTime || "invalid"),
+          id: departure.journeyId,
+          branchHash: departure.branchHash,
+          journeyCode: departure.journeyCode,
+          vehicleLength: departure.vehicleLength,
+        };
+      })
+      .filter(
+        (departure: SimpleDeparture) =>
+          departure.leavesAt.isValid() && departure.leavesAt.isAfter(dayjs())
+      );
   }
 
   public static async journey(
