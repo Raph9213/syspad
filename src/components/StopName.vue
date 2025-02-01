@@ -34,7 +34,7 @@ const lines = computed(() => {
 
 const formattedName = computed(() => {
   return lines.value.reduce(
-    (prev, curr, i) => prev + ("\n" + " ".repeat(8)).repeat(i) + curr,
+    (prev, curr, i) => prev + ("\n" + " ".repeat(6)).repeat(i) + curr,
     ""
   );
 });
@@ -45,7 +45,7 @@ const width = computed(() => {
   );
   const linesCount = lines.value.length;
 
-  return longestLineCharCount * 0.4 + linesCount * 7;
+  return longestLineCharCount * 0.1 + linesCount * 7;
 });
 </script>
 
@@ -70,11 +70,12 @@ div {
 span {
   white-space: pre;
   display: block;
-  transform: translateY(10vh) translateX(-3vh) rotate(-30deg);
+  transform: translateY(12vh) translateX(-3vh) rotate(-30deg);
   transform-origin: top left;
   font-size: 5vh;
   font-weight: bold;
   color: var(--title-color);
+  line-height: 4vh;
 }
 
 .inactive span {

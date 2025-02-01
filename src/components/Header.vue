@@ -27,8 +27,13 @@ useIntervalFn(() => {
         <label>min</label>
       </div>
     </div>
-    <div class="journeyCode" v-if="departure.journeyCode">
-      <span>{{ departure.journeyCode }}</span>
+    <div class="contextual">
+      <div class="journeyCode" v-if="departure.journeyCode">
+        <span>{{ departure.journeyCode }}</span>
+      </div>
+      <div class="shortTrain" v-if="departure.vehicleLength === 'SHORT'">
+        <span>Train court !</span>
+      </div>
     </div>
   </div>
 </template>
@@ -84,13 +89,42 @@ h1 {
   opacity: 0.7;
 }
 
-.journeyCode {
+.contextual {
   margin-left: 12vh;
+  display: flex;
+}
+
+.journeyCode {
   padding: 1.4vh 4vh;
   background-color: var(--gray);
   color: white;
   width: fit-content;
   font-size: 4vh;
   border-radius: 0 0 1vh 1vh;
+}
+
+.shortTrain {
+  padding: 1.4vh 4vh;
+  font-size: 4vh;
+  margin-left: -1vh;
+  background-color: #fec107;
+  color: var(--gray, gray);
+  font-weight: bold;
+  border-bottom-right-radius: 1vh;
+  animation: 2.3s blink infinite steps(1);
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 </style>

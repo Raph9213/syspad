@@ -26,7 +26,7 @@ const pathLength = computed(() => {
 });
 
 const path = computed(() => {
-  const offsetX = height.value / 8;
+  const offsetX = height.value / 13.5;
 
   const d = props.points.flatMap((point, i) => {
     const command = i === 0 ? "M" : "L";

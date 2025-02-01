@@ -115,7 +115,7 @@ watch(
           }"
         >
           <StopName
-            :char-limit="35 / group.length"
+            :char-limit="16"
             :name="stop.name"
             :is-inactive="!nextDesservedStops.has(stop.id)"
           ></StopName>
@@ -134,9 +134,10 @@ watch(
   position: relative;
   padding-left: 8vh;
   display: flex;
-  gap: 25vh;
+  gap: 40vh;
   height: 75vh;
-  width: calc(100vw - 32vh);
+  max-width: calc(100vw - 32vh);
+  width: fit-content;
   justify-content: space-between;
   z-index: 99;
 }
@@ -145,6 +146,10 @@ watch(
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.floors:first-child {
+  min-width: 100vh;
 }
 
 .floor:only-child {
