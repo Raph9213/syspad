@@ -107,14 +107,17 @@ watch(
           :style="{
             '--animation-delay': `${
               nextDesservedStops.has(stop.id)
-                ? i * 0.3 + 1
-                : (nextDesservedStops.size ?? 0) * 0.3 + 2.5
+                ? [...nextDesservedStops.values()].indexOf(stop.id) *
+                    (7.5 / nextDesservedStops.size) +
+                  0.5
+                : 9
             }s`,
             '--group-count': group.length,
             '--position': i,
           }"
         >
           <StopName
+            class="label"
             :char-limit="16"
             :name="stop.name"
             :is-inactive="!nextDesservedStops.has(stop.id)"
@@ -149,7 +152,7 @@ watch(
 }
 
 .floors:first-child {
-  min-width: 100vh;
+  min-width: 120vh;
 }
 
 .floor:only-child {
@@ -173,8 +176,30 @@ watch(
 
 .stop {
   position: relative;
-  animation: stopAppear 0.4s ease-out var(--animation-delay) forwards;
+  animation: stopAppear 2s ease-out var(--animation-delay) forwards;
   opacity: 0;
+}
+
+@keyframes stopAppear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.stop .label {
+  animation: labelAppear 1s ease-out var(--animation-delay) forwards;
+}
+
+@keyframes labelAppear {
+  from {
+    scale: 1.1;
+  }
+  to {
+    scale: 1;
+  }
 }
 
 .stop:only-child {
@@ -197,24 +222,6 @@ watch(
 
 .stop.hidden:not(.active) {
   visibility: hidden;
-}
-
-@keyframes stopAppear {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes labelAppear {
-  from {
-    scale: 1.1;
-  }
-  to {
-    scale: 1;
-  }
 }
 
 .stop:not(.active) .dot {

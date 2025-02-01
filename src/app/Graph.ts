@@ -165,7 +165,7 @@ export class Graph<T> {
   get commonPaths(): Set<T[]> {
     const result = new Set<T[]>(); // Stocke les sous-chemins uniques
 
-    for (const path of this.initialPaths) {
+    for (const path of this.initialPaths.sort((a, b) => b.length - a.length)) {
       const subPaths: T[][] = [];
       let subPath: T[] = [];
 
