@@ -34,7 +34,7 @@ const lines = computed(() => {
 
 const formattedName = computed(() => {
   return lines.value.reduce(
-    (prev, curr, i) => prev + ("\n" + " ".repeat(6)).repeat(i) + curr,
+    (prev, curr, i) => prev + "\n" + " ".repeat(6).repeat(i) + curr,
     ""
   );
 });
@@ -70,7 +70,7 @@ div {
 span {
   white-space: pre;
   display: block;
-  transform: translateY(12vh) translateX(-3vh) rotate(-30deg);
+  transform: translateY(9vh) translateX(-3vh) rotate(-30deg);
   transform-origin: top left;
   font-size: 5vh;
   font-weight: bold;

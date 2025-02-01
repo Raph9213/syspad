@@ -152,7 +152,8 @@ watch(
 }
 
 .floors:first-child {
-  min-width: 120vh;
+  /* FIXME: défini une largeur min et max en meme temps */
+  /* min-width: 120vh; */
 }
 
 .floor:only-child {
