@@ -133,7 +133,7 @@ const tertiaryColor = computed(() => {
   </svg>
 </template>
 
-<style>
+<style scoped>
 svg {
   position: fixed;
   top: 0;

@@ -18,7 +18,7 @@ export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
   const first = firstUnique(
     3,
     (x) => x.journeyCode?.slice(0, 2) || "",
-    departures.filter((x) => x.branchHash === "0")
+    departures.filter((x) => x.branchHash === "1")
   );
 
   const result = [];

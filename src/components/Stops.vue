@@ -5,6 +5,7 @@ import { Graph } from "../app/Graph";
 import { getFixedPosition } from "../layout";
 import type { SimpleJourney, SimpleStop } from "../services/Wagon";
 import AnimatedPath from "./AnimatedPath.vue";
+import StopName from "./StopName.vue";
 
 const props = defineProps<{
   journeys: SimpleJourney[];
@@ -89,7 +90,7 @@ watch(
     :style="{ '--line-color': '#' + (line?.backgroundColor ?? '000000') }"
   >
     <div class="floors" v-for="(group, i) in stops.groupedTopologicalPaths">
-      <div class="floor" v-for="floor in group.sort(northToSouth)">
+      <div class="floor" v-for="(floor, j) in group.sort(northToSouth)">
         <div
           class="stop"
           v-for="stop in floor"
@@ -109,13 +110,13 @@ watch(
             '--position': i,
           }"
         >
-          <!-- <span class="label" aria-hidden="true" style="visibility: hidden">{{
-            stop.name
-          }}</span>
-          <span class="label decorative">{{ stop.name }}</span> -->
+          <StopName
+            :char-limit="35 / group.length"
+            :name="stop.name"
+            :is-inactive="!nextDesservedStops.has(stop.id)"
+          ></StopName>
           <div class="anchor" :id="stop.id"></div>
           <div class="dot"></div>
-          <p style="height: 5vh; width: 100%">{{ stop.name }}</p>
         </div>
       </div>
     </div>
@@ -124,13 +125,13 @@ watch(
 
 <style scoped>
 .groups {
-  padding-top: 10vh;
+  padding-top: 15vh;
   /* transform: translateY(-10%); */
   position: relative;
   padding-left: 8vh;
   display: flex;
   gap: 25vh;
-  height: 85vh;
+  height: 75vh;
   width: calc(100vw - 32vh);
   justify-content: space-between;
   z-index: 99;
@@ -140,7 +141,6 @@ watch(
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 2px solid red;
 }
 
 .floor:only-child {
@@ -148,11 +148,15 @@ watch(
 }
 
 .floor {
-  border: 2px solid green;
   display: flex;
   gap: 5vh;
   justify-content: space-between;
 }
+
+/* .stop:last-child:not(:first-child) .anchor {
+  position: absolute;
+  right: 0;
+} */
 
 .floors:last-child .floor {
   justify-content: start;
@@ -182,36 +186,8 @@ watch(
   background-color: var(--line-color);
 }
 
-.stop .label {
-  --label-font-size: 5vh;
-  transform-origin: left;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  font-size: var(--label-font-size);
-  height: 40vh;
-  font-weight: bold;
-  color: var(--title-color);
-}
-
 .stop.hidden:not(.active) {
   visibility: hidden;
-}
-
-.stop.active.origin .label.decorative,
-.stop.active.terminus .label.decorative {
-  border-radius: 999px;
-  z-index: 1;
-}
-
-.stop.active.origin .label.decorative {
-  background-color: var(--title-color);
-  color: white;
-  box-shadow: 0 0 0 1vh var(--title-color);
-}
-
-.stop.active.terminus .label.decorative {
-  background-color: white;
-  box-shadow: 0 0 0 1vh white;
 }
 
 @keyframes stopAppear {
@@ -232,20 +208,7 @@ watch(
   }
 }
 
-.stop .label.decorative {
-  top: 100%;
-  left: 0;
-  position: absolute;
-  transform-origin: top;
-  transform: translateY(-12vh) translateX(-4vh) rotate(240deg);
-  animation: labelAppear 0.4s ease-out var(--animation-delay);
-}
-
 .stop:not(.active) .dot {
   opacity: 0.5;
-}
-
-.stop:not(.active) .label {
-  color: #cfcaca;
 }
 </style>
