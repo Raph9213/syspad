@@ -1,6 +1,7 @@
 export class Graph<T> {
   private adjacencyList: Map<string, Set<string>>;
   private nodeMap: Map<string, T> = new Map();
+  private initialPaths: T[][] = [];
 
   constructor(private identity: (x: T) => string) {
     this.adjacencyList = new Map();
@@ -14,6 +15,8 @@ export class Graph<T> {
    */
   add(nodes: T[], predecessors: T[] = []): void {
     if (nodes.length === 0) return;
+
+    this.initialPaths.push(nodes);
 
     // Ensure all nodes in the list are added and connected sequentially
     for (let i = 0; i < nodes.length; i++) {
@@ -136,5 +139,121 @@ export class Graph<T> {
     }
 
     return groups;
+  }
+
+  private predecessors(node: string): string[] {
+    const preds: string[] = [];
+    this.adjacencyList.forEach((neighbors, neighbor) => {
+      if (neighbors.has(node)) {
+        preds.push(neighbor);
+      }
+    });
+    return preds;
+  }
+
+  private successors(node: string): string[] {
+    const succs: string[] = [];
+    const neighbors = this.adjacencyList.get(node);
+    if (neighbors) {
+      neighbors.forEach((neighbor) => {
+        succs.push(neighbor);
+      });
+    }
+    return succs;
+  }
+
+  get commonPaths(): Set<T[]> {
+    const result = new Set<T[]>(); // Stocke les sous-chemins uniques
+
+    for (const path of this.initialPaths) {
+      const subPaths: T[][] = [];
+      let subPath: T[] = [];
+
+      for (const node of path) {
+        const nodeId = this.identity(node);
+        const preds = this.predecessors(nodeId);
+        const succs = this.successors(nodeId);
+
+        if (preds.length > 1) {
+          // Si le nœud a plusieurs prédécesseurs, on ferme le sous-chemin actuel
+          if (subPath.length > 0) {
+            subPaths.push(subPath);
+          }
+          // Démarre un nouveau sous-chemin incluant ce nœud
+          subPath = [node];
+        } else {
+          subPath.push(node);
+        }
+
+        if (succs.length > 1) {
+          // Si le nœud a plusieurs successeurs, on ferme le sous-chemin actuel après l'avoir ajouté
+          subPaths.push(subPath);
+          subPath = [];
+        }
+      }
+
+      // Ajoute le dernier sous-chemin s'il contient encore des éléments
+      if (subPath.length > 0) {
+        subPaths.push(subPath);
+      }
+
+      for (const subPath of subPaths) {
+        if (
+          ![...result].some((existingPath) =>
+            this.arraysEqual(existingPath, subPath)
+          )
+        ) {
+          result.add(subPath);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Vérifie si deux tableaux sont égaux en contenu et en ordre.
+   */
+  private arraysEqual(arr1: T[], arr2: T[]): boolean {
+    if (arr1.length !== arr2.length) return false;
+    return arr1.every(
+      (element, index) => this.identity(element) === this.identity(arr2[index])
+    );
+  }
+
+  get groupedTopologicalPaths(): T[][][] {
+    const topoSort = this.groupedTopologicalSort(); // Récupère le tri topologique normal
+    const paths = this.commonPaths; // Récupère les chemins communs
+    const result: T[][][] = []; // Liste des niveaux du tri topo
+    const processed = new Set<string>(); // Garde en mémoire les éléments déjà ajoutés
+
+    for (const level of topoSort) {
+      const newLevel: T[][] = [];
+
+      for (const node of level) {
+        const nodeId = this.identity(node);
+
+        if (processed.has(nodeId)) continue; // On ignore les éléments déjà placés
+
+        // Cherche un chemin contenant ce noeud
+        const path = [...paths].find((p) =>
+          p.some((n) => this.identity(n) === nodeId)
+        );
+
+        if (path) {
+          newLevel.push(path); // Ajoute le chemin entier au niveau du tri topo
+          path.forEach((n) => processed.add(this.identity(n))); // Marque tous les éléments du chemin
+        } else {
+          newLevel.push([node]); // Ajoute l'élément seul
+          processed.add(nodeId);
+        }
+      }
+
+      if (newLevel.length > 0) {
+        result.push(newLevel); // On n'ajoute que si le niveau contient des éléments
+      }
+    }
+
+    return result;
   }
 }

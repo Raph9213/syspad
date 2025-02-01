@@ -41,6 +41,10 @@ const nextDesservedStops = computed(() => {
 
 const line = computed(() => props.journeys.at(0)?.line);
 
+function northToSouth(a: SimpleStop[], b: SimpleStop[]) {
+  return a[0].position.lat - b[0].position.lat;
+}
+
 watch(
   () => props.journeys.at(0)?.userStopDeparture.id,
   async () => {
@@ -84,32 +88,35 @@ watch(
     class="groups"
     :style="{ '--line-color': '#' + (line?.backgroundColor ?? '000000') }"
   >
-    <div class="stops" v-for="(group, i) in stops.groupedTopologicalSort()">
-      <div
-        class="stop"
-        v-for="stop in group"
-        :class="{
-          active: nextDesservedStops.has(stop.id),
-          hidden: i === 0,
-          origin: stop.id === nextDesservedStops.values().next().value,
-          terminus: stop.id === [...nextDesservedStops.values()].at(-1),
-        }"
-        :style="{
-          '--animation-delay': `${
-            nextDesservedStops.has(stop.id)
-              ? i * 0.3 + 1
-              : (nextDesservedStops.size ?? 0) * 0.3 + 2.5
-          }s`,
-          '--group-count': group.length,
-          '--position': i,
-        }"
-      >
-        <span class="label" aria-hidden="true" style="visibility: hidden">{{
-          stop.name
-        }}</span>
-        <span class="label decorative">{{ stop.name }}</span>
-        <div :id="stop.id"></div>
-        <div class="dot"></div>
+    <div class="floors" v-for="(group, i) in stops.groupedTopologicalPaths">
+      <div class="floor" v-for="floor in group.sort(northToSouth)">
+        <div
+          class="stop"
+          v-for="stop in floor"
+          :class="{
+            active: nextDesservedStops.has(stop.id),
+            hidden: i === 0,
+            origin: stop.id === nextDesservedStops.values().next().value,
+            terminus: stop.id === [...nextDesservedStops.values()].at(-1),
+          }"
+          :style="{
+            '--animation-delay': `${
+              nextDesservedStops.has(stop.id)
+                ? i * 0.3 + 1
+                : (nextDesservedStops.size ?? 0) * 0.3 + 2.5
+            }s`,
+            '--group-count': group.length,
+            '--position': i,
+          }"
+        >
+          <!-- <span class="label" aria-hidden="true" style="visibility: hidden">{{
+            stop.name
+          }}</span>
+          <span class="label decorative">{{ stop.name }}</span> -->
+          <div :id="stop.id"></div>
+          <div class="dot"></div>
+          <p style="height: 5vh; width: 100%">{{ stop.name }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -117,22 +124,38 @@ watch(
 
 <style scoped>
 .groups {
-  transform: translateY(-10%);
+  padding-top: 10vh;
+  /* transform: translateY(-10%); */
   position: relative;
   padding-left: 8vh;
   display: flex;
-  /* gap: 3.6vw; */
-  height: 100vh;
+  gap: 15vh;
+  height: 85vh;
   width: calc(100vw - 32vh);
   justify-content: space-between;
   z-index: 99;
 }
 
-.stops {
+.floors {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: -10vh;
+  border: 2px solid red;
+}
+
+.floor:only-child {
+  margin: auto 0;
+}
+
+.floor {
+  border: 2px solid green;
+  display: flex;
+  gap: 5vh;
+  justify-content: space-between;
+}
+
+.floors:last-child .floor {
+  justify-content: start;
 }
 
 .stop {
@@ -168,10 +191,6 @@ watch(
   height: 40vh;
   font-weight: bold;
   color: var(--title-color);
-}
-
-.stop:not(:first-child) {
-  margin-top: calc(-10vh * var(--position));
 }
 
 .stop.hidden:not(.active) {
@@ -222,7 +241,11 @@ watch(
   animation: labelAppear 0.4s ease-out var(--animation-delay);
 }
 
+.stop:not(.active) .dot {
+  opacity: 0.5;
+}
+
 .stop:not(.active) .label {
-  opacity: 0.7;
+  color: #cfcaca;
 }
 </style>

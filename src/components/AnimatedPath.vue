@@ -117,11 +117,22 @@ svg {
 svg.animated path {
   stroke-dasharray: var(--path-length);
   stroke-dashoffset: var(--path-length);
-  animation: draw 5s linear infinite;
+  animation: draw 10s linear infinite;
 }
 
 @keyframes draw {
-  to {
+  0% {
+    opacity: 1;
+    stroke-dashoffset: var(--path-length);
+  }
+
+  75% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    opacity: 0;
     stroke-dashoffset: 0;
   }
 }
@@ -135,14 +146,14 @@ svg.gradientBackground {
 }
 
 svg.gradient path {
-  animation: fadeOut 5s linear infinite;
+  animation: fadeOut 10s linear infinite;
 }
 
 @keyframes fadeOut {
   0% {
     opacity: 1;
   }
-  100% {
+  75% {
     opacity: 0;
   }
 }
