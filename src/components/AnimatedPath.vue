@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useWindowSize } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { useTimeout, useWindowSize } from "@vueuse/core";
+import { computed, ref, watch } from "vue";
 import { Colors } from "../colors";
 
 const props = defineProps<{
@@ -10,10 +10,14 @@ const props = defineProps<{
   isAnimated: boolean;
   /** Path with gray background used when stops are not desserved */
   isInactive: boolean;
+  canAnimate: boolean;
 }>();
 
 const { width, height } = useWindowSize();
 const id = ref(window.crypto.randomUUID());
+
+const { ready: firstAnimationFinished, start: startFirstAnimation } =
+  useTimeout(7500, { controls: true });
 
 const mainPath = ref<SVGPathElement | null>(null);
 
@@ -70,6 +74,15 @@ const secondaryColor = computed(() => {
 const tertiaryColor = computed(() => {
   return Colors.mix(primaryColor.value, "FFFFFF", 0.75);
 });
+
+watch(
+  () => props.canAnimate,
+  (canAnimate) => {
+    if (canAnimate) {
+      startFirstAnimation();
+    }
+  }
+);
 </script>
 
 <template>
@@ -91,7 +104,24 @@ const tertiaryColor = computed(() => {
   </svg>
 
   <svg
-    v-if="isAnimated"
+    v-if="isAnimated && !firstAnimationFinished"
+    :width="width"
+    :height="height"
+    style="z-index: 2"
+  >
+    <path
+      :d="path"
+      fill="none"
+      :stroke="tertiaryColor"
+      stroke-width="6vh"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      ref="mainPath"
+    ></path>
+  </svg>
+
+  <svg
+    v-if="isAnimated && firstAnimationFinished"
     class="gradient"
     :width="width"
     :height="height"
@@ -115,7 +145,7 @@ const tertiaryColor = computed(() => {
   </svg>
 
   <svg
-    v-if="isAnimated"
+    v-if="isAnimated && firstAnimationFinished"
     class="gradientBackground"
     :width="width"
     :height="height"

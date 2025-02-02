@@ -1,14 +1,32 @@
 <script lang="ts" setup>
-import { useIntervalFn } from "@vueuse/core";
+import { computedAsync, promiseTimeout, useIntervalFn } from "@vueuse/core";
 import dayjs from "dayjs";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { SimpleDeparture } from "../services/Wagon";
 
 const props = defineProps<{
   departure: SimpleDeparture;
+  canAnimate: boolean;
 }>();
 
 const remainingMinutes = ref(-1);
+
+const contextActive = ref(false);
+const titleActive = ref(false);
+
+watch(
+  () => props.canAnimate,
+  async (active) => {
+    if (active) {
+      titleActive.value = true;
+      await promiseTimeout(1500);
+      contextActive.value = true;
+    } else {
+      contextActive.value = false;
+      titleActive.value = false;
+    }
+  }
+);
 
 useIntervalFn(() => {
   remainingMinutes.value = props.departure.leavesAt.diff(dayjs(), "minute");
@@ -16,11 +34,15 @@ useIntervalFn(() => {
 </script>
 
 <template>
-  <div class="header">
+  <div class="header" :class="{ titleActive, contextActive }">
     <div class="box">
       <div class="text">
         <span>Terminus</span>
-        <h1>{{ departure.destination }}</h1>
+        <div class="dynamicSize">
+          <div style="overflow: hidden">
+            <h1>{{ departure.destination }}</h1>
+          </div>
+        </div>
       </div>
       <div class="minutes">
         <span>{{ remainingMinutes }}</span>
@@ -49,6 +71,9 @@ useIntervalFn(() => {
 }
 
 .text {
+  min-width: 60vh;
+  position: relative;
+  z-index: 2;
   padding: 2vh 6vh;
   display: flex;
   flex-direction: column;
@@ -60,12 +85,27 @@ useIntervalFn(() => {
   color: var(--gray);
 }
 
+.dynamicSize {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 1s linear;
+}
+
+.titleActive .dynamicSize {
+  transition-duration: 1.5s;
+}
+
+.titleActive .dynamicSize {
+  grid-template-columns: 1fr;
+}
+
 h1 {
   padding: 0;
   margin: 0;
   font-size: 9vh;
   color: var(--title-color);
   min-width: 40vh;
+  white-space: nowrap;
 }
 
 .minutes {
@@ -77,6 +117,12 @@ h1 {
   width: 20vh;
   color: var(--time-color, yellow);
   border-radius: 0 1vh 1vh 0;
+  transform: translateX(-100%);
+  transition: transform 1s cubic-bezier(0.15, -0.04, 0.08, 0.94);
+}
+
+.contextActive .minutes {
+  transform: translateX(0);
 }
 
 .minutes span {
@@ -90,8 +136,14 @@ h1 {
 }
 
 .contextual {
+  transform: translateY(-100%);
   margin-left: 12vh;
   display: flex;
+  transition: transform 1s cubic-bezier(0.15, -0.04, 0.08, 0.94);
+}
+
+.contextActive .contextual {
+  transform: translateY(-0%);
 }
 
 .journeyCode {

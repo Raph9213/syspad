@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { promiseTimeout, useIntervalFn } from "@vueuse/core";
+import { promiseTimeout, useIntervalFn, useTimeout } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 import { Graph } from "../app/Graph";
 import { getFixedPosition } from "../layout";
@@ -11,6 +11,7 @@ import { isInParis } from "../geo";
 const props = defineProps<{
   journeys: SimpleJourney[];
   start: SimpleStop["id"];
+  canAnimate: boolean;
 }>();
 
 const paths = ref<
@@ -154,12 +155,18 @@ function updateParisCirclePosition() {
 }
 
 watch(
-  () => props.journeys.at(0)?.stops.at(-1)?.id,
+  () =>
+    props.journeys
+      .at(0)
+      ?.stops.reduce((acc, stop) => acc + stop.position.lat, 0),
   async () => {
     await promiseTimeout(200);
-    checkIfSomeStopsAreOutOfScreen();
-    updateParisCirclePosition();
+    someStopsOutOfScreen.value = false;
     await promiseTimeout(200);
+    checkIfSomeStopsAreOutOfScreen();
+    await promiseTimeout(200);
+    updateParisCirclePosition();
+    await promiseTimeout(500);
     updatePaths();
   },
   { immediate: true }
@@ -171,8 +178,9 @@ watch(
     <AnimatedPath
       :points="path.points"
       :color="line?.backgroundColor ?? '000000'"
-      :is-animated="i === 0"
+      :is-animated="i === 0 && canAnimate"
       :is-inactive="false"
+      :can-animate="canAnimate"
       v-for="(path, i) in paths"
     ></AnimatedPath>
   </div>
@@ -189,7 +197,7 @@ watch(
   </div>
   <div
     class="groups"
-    :class="{ compact: someStopsOutOfScreen }"
+    :class="{ compact: someStopsOutOfScreen, hidden: !canAnimate }"
     :style="{ '--line-color': '#' + (line?.backgroundColor ?? '000000') }"
   >
     <div class="floors" v-for="(group, i) in stops.groupedTopologicalPaths">
@@ -209,14 +217,15 @@ watch(
             hidden: i === 0,
             origin: stop.id === nextDesservedStops.values().next().value,
             terminus: stop.id === [...nextDesservedStops.values()].at(-1),
+            appear: canAnimate,
           }"
           :style="{
             '--animation-delay': `${
               nextDesservedStops.has(stop.id)
                 ? [...nextDesservedStops.values()].indexOf(stop.id) *
-                    (7.5 / nextDesservedStops.size) +
-                  0.5
-                : 9
+                    (4.5 / nextDesservedStops.size) +
+                  2.5
+                : 11
             }s`,
             '--group-count': group.length,
             '--position': i,
@@ -254,6 +263,10 @@ watch(
   z-index: 99;
 }
 
+.groups.hidden {
+  opacity: 0;
+}
+
 .floors {
   display: flex;
   flex-direction: column;
@@ -261,7 +274,7 @@ watch(
 }
 
 .groups:not(.compact) .floors:first-child {
-  min-width: 120vh;
+  /* min-width: 120vh; */
 }
 
 .floor:only-child {
@@ -279,8 +292,11 @@ watch(
 
 .stop {
   position: relative;
-  animation: stopAppear 2s ease-out var(--animation-delay) forwards;
   opacity: 0;
+}
+
+.stop.appear {
+  animation: stopAppear 2s ease-out var(--animation-delay) forwards;
 }
 
 @keyframes stopAppear {
@@ -292,13 +308,13 @@ watch(
   }
 }
 
-.stop .label {
-  animation: labelAppear 1s ease-out var(--animation-delay) forwards;
+.stop.appear .label {
+  animation: labelAppear 0.5s ease-out var(--animation-delay) forwards;
 }
 
 @keyframes labelAppear {
   from {
-    scale: 1.1;
+    scale: 1.3;
   }
   to {
     scale: 1;
