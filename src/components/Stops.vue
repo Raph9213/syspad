@@ -76,6 +76,11 @@ function isStopHidden(
     return false;
   }
 
+  console.log(
+    i !== floor.length - 1 && !nextDesservedStops.value.has(stop.id),
+    stop.name
+  );
+
   return i !== floor.length - 1 && !nextDesservedStops.value.has(stop.id);
 }
 
@@ -142,10 +147,11 @@ function updateParisCirclePosition() {
 watch(
   () => props.journeys.at(0)?.stops.at(-1)?.id,
   async () => {
-    await promiseTimeout(1000);
-    updatePaths();
+    await promiseTimeout(200);
     checkIfSomeStopsAreOutOfScreen();
     updateParisCirclePosition();
+    await promiseTimeout(200);
+    updatePaths();
   },
   { immediate: true }
 );
@@ -182,7 +188,7 @@ watch(
         class="floor"
         v-for="(floor, j) in group.sort(northToSouth)"
         :style="{
-          gap: 12 / group.length + 'vh',
+          gap: someStopsOutOfScreen ? '3vh' : 12 / group.length + 'vh',
         }"
       >
         <div
@@ -223,13 +229,13 @@ watch(
 
 <style scoped>
 .groups {
-  padding-top: 25vh;
+  padding-top: 30vh;
   /* transform: translateY(-10%); */
   position: relative;
   padding-left: 8vh;
   display: flex;
   gap: 40vh;
-  height: 70vh;
+  height: 60vh;
   max-width: calc(100vw - 32vh);
   width: fit-content;
   justify-content: space-between;
@@ -242,7 +248,7 @@ watch(
   justify-content: space-between;
 }
 
-.floors:not(.compact):first-child {
+.groups:not(.compact) .floors:first-child {
   min-width: 120vh;
 }
 
@@ -254,11 +260,6 @@ watch(
   display: flex;
   justify-content: space-between;
 }
-
-/* .stop:last-child:not(:first-child) .anchor {
-  position: absolute;
-  right: 0;
-} */
 
 .floors:last-child .floor {
   justify-content: start;

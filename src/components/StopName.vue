@@ -56,7 +56,7 @@ const width = computed(() => {
 
 <template>
   <div
-    :class="{ inactive: isInactive, compact }"
+    :class="{ inactive: isInactive, labelHidden: compact }"
     :style="{
       width: width + 'vh',
     }"
@@ -83,7 +83,7 @@ span {
   line-height: 4vh;
 }
 
-.compact span {
+.labelHidden span {
   display: none;
 }
 
