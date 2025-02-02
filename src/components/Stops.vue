@@ -6,6 +6,7 @@ import { getFixedPosition } from "../layout";
 import type { SimpleJourney, SimpleStop } from "../services/Wagon";
 import AnimatedPath from "./AnimatedPath.vue";
 import StopName from "./StopName.vue";
+import { isInParis } from "../geo";
 
 const props = defineProps<{
   journeys: SimpleJourney[];
@@ -30,32 +31,31 @@ const stops = computed<Graph<SimpleStop>>(() => {
   return graph;
 });
 
+const stopsInParis = computed(() => {
+  return props.journeys.at(0)?.stops.filter((stop) => isInParis(stop)) || [];
+});
+
 const someStopsOutOfScreen = ref(false);
 
-watch(
-  () => props.journeys.at(0)?.stops.at(-1)?.id,
-  async () => {
-    await promiseTimeout(1000);
-    for (const journey of props.journeys) {
-      for (const stop of journey.stops) {
-        const element = document.getElementById(stop.id);
-        if (!element) {
-          continue;
-        }
+function checkIfSomeStopsAreOutOfScreen() {
+  for (const journey of props.journeys) {
+    for (const stop of journey.stops) {
+      const element = document.getElementById(stop.id);
+      if (!element) {
+        continue;
+      }
 
-        const { x, y } = getFixedPosition(element);
+      const { x, y } = getFixedPosition(element);
 
-        if (x < 0 || x > window.innerWidth || y < 0 || y > window.innerHeight) {
-          someStopsOutOfScreen.value = true;
-          return;
-        }
+      if (x < 0 || x > window.innerWidth || y < 0 || y > window.innerHeight) {
+        someStopsOutOfScreen.value = true;
+        return;
       }
     }
+  }
 
-    someStopsOutOfScreen.value = false;
-  },
-  { immediate: true }
-);
+  someStopsOutOfScreen.value = false;
+}
 
 const nextDesservedStops = computed(() => {
   const stops = new Set<SimpleStop["id"]>();
@@ -89,30 +89,63 @@ function northToSouth(a: SimpleStop[], b: SimpleStop[]): number {
   return meanLatitude(b) - meanLatitude(a);
 }
 
+function updatePaths() {
+  const _paths = [];
+
+  for (const journey of props.journeys) {
+    const points = journey.stops.map((stop) => {
+      const element = document.getElementById(stop.id);
+      if (!element) {
+        return { x: 0, y: 0 };
+      }
+
+      return getFixedPosition(element);
+    });
+
+    _paths.push({
+      points,
+      isAnimated: true,
+      isInactive: false,
+    });
+  }
+
+  paths.value = _paths;
+}
+
+const parisCirclePosition = ref({ xLeft: "0vh", xRight: "0vh", y: "0vh" });
+
+function updateParisCirclePosition() {
+  const [first, last] = [stopsInParis.value.at(0), stopsInParis.value.at(-1)];
+
+  function _getFixedPosition(stop: SimpleStop) {
+    const element = document.getElementById(stop.id);
+    if (!element) {
+      return { x: 0, y: 0 };
+    }
+
+    return getFixedPosition(element);
+  }
+
+  const firstStopIsInParis =
+    first?.id === nextDesservedStops.value.values().next().value;
+
+  parisCirclePosition.value = {
+    xLeft:
+      first && !firstStopIsInParis
+        ? _getFixedPosition(first).x + "px"
+        : "-20vh",
+    xRight: last ? _getFixedPosition(last).x + "px" : "-20vh",
+    y: last ? _getFixedPosition(last).y + "px" : "50vh",
+  };
+}
+
 watch(
   () => props.journeys.at(0)?.stops.at(-1)?.id,
   async () => {
     await promiseTimeout(1000);
-    const _paths = [];
-
-    for (const journey of props.journeys) {
-      const points = journey.stops.map((stop) => {
-        const element = document.getElementById(stop.id);
-        if (!element) {
-          return { x: 0, y: 0 };
-        }
-
-        return getFixedPosition(element);
-      });
-
-      _paths.push({
-        points,
-        isAnimated: true,
-        isInactive: false,
-      });
-    }
-
-    paths.value = _paths;
+    updatePaths();
+    checkIfSomeStopsAreOutOfScreen();
+    updateParisCirclePosition();
   },
   { immediate: true }
 );
@@ -127,6 +160,17 @@ watch(
       :is-inactive="false"
       v-for="(path, i) in paths"
     ></AnimatedPath>
+  </div>
+  <div
+    v-if="stopsInParis.length > 0"
+    class="circle"
+    :style="{
+      '--top': parisCirclePosition.y,
+      '--left': parisCirclePosition.xLeft,
+      '--right': parisCirclePosition.xRight,
+    }"
+  >
+    <span>Paris</span>
   </div>
   <div
     class="groups"
@@ -179,13 +223,13 @@ watch(
 
 <style scoped>
 .groups {
-  padding-top: 15vh;
+  padding-top: 25vh;
   /* transform: translateY(-10%); */
   position: relative;
   padding-left: 8vh;
   display: flex;
   gap: 40vh;
-  height: 75vh;
+  height: 70vh;
   max-width: calc(100vw - 32vh);
   width: fit-content;
   justify-content: space-between;
@@ -272,5 +316,26 @@ watch(
 
 .stop:not(.active) .dot {
   opacity: 0.5;
+}
+
+.circle {
+  position: fixed;
+  display: grid;
+  place-items: center;
+  top: var(--top);
+  left: var(--left);
+  right: calc(100vw - var(--right));
+  height: calc(var(--right) - var(--left));
+  transform: translateY(-50%) scale(1.2);
+  background: linear-gradient(to bottom, #f0ebe9, #dcd7d6);
+  border-radius: 9999px;
+  z-index: -1;
+}
+
+.circle span {
+  text-transform: uppercase;
+  font-size: 5vh;
+  margin-top: 30vh;
+  color: var(--gray);
 }
 </style>
