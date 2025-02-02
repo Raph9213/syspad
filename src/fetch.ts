@@ -6,7 +6,7 @@ function randomize<T>(array: T[]): T[] {
 }
 
 export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
-  const [ORIGIN, _, LINE] = "stop_area:IDFM:71651/line/line:IDFM:C01742".split(
+  const [ORIGIN, _, LINE] = "stop_area:IDFM:478926/line/line:IDFM:C01742".split(
     "/"
   );
 

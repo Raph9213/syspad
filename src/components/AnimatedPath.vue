@@ -202,7 +202,7 @@ svg.gradientBackground {
 }
 
 svg.gradient path {
-  animation: fadeOut 10s linear infinite;
+  animation: fadeOut 10s linear 2.5s infinite;
 }
 
 @keyframes fadeOut {
