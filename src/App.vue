@@ -24,18 +24,18 @@ const { ready: canAnimate, start: preventAnimation } = useTimeout(4000, {
 
 useIntervalFn(async () => {
   journeys.value = await nextTrainJourneys();
-}, 20 * 1000);
+}, 61 * 1000);
 
 onMounted(async () => {
   journeys.value = await nextTrainJourneys();
 });
 
 watch(
-  () => journeys.value?.at(0)?.userStopDeparture,
-  async (departure) => {
+  () => journeys.value?.at(0)?.stops.reduce((acc, stop) => acc + stop.id, ""),
+  async () => {
     preventAnimation();
     await promiseTimeout(1500);
-    nextDeparture.value = departure;
+    nextDeparture.value = journeys.value?.at(0)?.userStopDeparture;
   }
 );
 </script>

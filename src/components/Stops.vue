@@ -214,7 +214,7 @@ watch(
           :class="{
             active:
               nextDesservedStops.has(stop.id) && !skippedStops.has(stop.id),
-            hidden: i === 0,
+            hidden: i === 0 && k === 0,
             origin: stop.id === nextDesservedStops.values().next().value,
             terminus: stop.id === [...nextDesservedStops.values()].at(-1),
             appear: canAnimate,

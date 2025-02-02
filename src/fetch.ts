@@ -6,7 +6,7 @@ function randomize<T>(array: T[]): T[] {
 }
 
 export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
-  const [ORIGIN, _, LINE] = "stop_area:IDFM:71370/line/line:IDFM:C01740".split(
+  const [ORIGIN, _, LINE] = "stop_area:IDFM:71651/line/line:IDFM:C01742".split(
     "/"
   );
 
@@ -15,7 +15,7 @@ export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
   const first = firstUnique(
     4,
     (x) => x.journeyCode?.slice(0, 2) || x.destination,
-    departures.filter((x) => true || x.branchHash === "1")
+    departures.filter((x) => x.branchHash === "1")
   );
 
   const result = [];
@@ -34,5 +34,5 @@ export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
     });
   }
 
-  return randomize(result);
+  return result;
 }
