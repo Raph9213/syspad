@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { promiseTimeout } from "@vueuse/core";
+import { promiseTimeout, useIntervalFn } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 import { Graph } from "../app/Graph";
 import { getFixedPosition } from "../layout";
@@ -30,6 +30,33 @@ const stops = computed<Graph<SimpleStop>>(() => {
   return graph;
 });
 
+const someStopsOutOfScreen = ref(false);
+
+watch(
+  () => props.journeys.at(0)?.stops.at(-1)?.id,
+  async () => {
+    await promiseTimeout(1000);
+    for (const journey of props.journeys) {
+      for (const stop of journey.stops) {
+        const element = document.getElementById(stop.id);
+        if (!element) {
+          continue;
+        }
+
+        const { x, y } = getFixedPosition(element);
+
+        if (x < 0 || x > window.innerWidth || y < 0 || y > window.innerHeight) {
+          someStopsOutOfScreen.value = true;
+          return;
+        }
+      }
+    }
+
+    someStopsOutOfScreen.value = false;
+  },
+  { immediate: true }
+);
+
 const nextDesservedStops = computed(() => {
   const stops = new Set<SimpleStop["id"]>();
 
@@ -39,6 +66,18 @@ const nextDesservedStops = computed(() => {
 
   return stops;
 });
+
+function isStopHidden(
+  floor: SimpleStop[],
+  i: number,
+  stop: SimpleStop
+): boolean {
+  if (someStopsOutOfScreen.value === false) {
+    return false;
+  }
+
+  return i !== floor.length - 1 && !nextDesservedStops.value.has(stop.id);
+}
 
 const line = computed(() => props.journeys.at(0)?.line);
 
@@ -51,7 +90,7 @@ function northToSouth(a: SimpleStop[], b: SimpleStop[]): number {
 }
 
 watch(
-  () => props.journeys.at(0)?.userStopDeparture.id,
+  () => props.journeys.at(0)?.stops.at(-1)?.id,
   async () => {
     await promiseTimeout(1000);
     const _paths = [];
@@ -91,13 +130,20 @@ watch(
   </div>
   <div
     class="groups"
+    :class="{ compact: someStopsOutOfScreen }"
     :style="{ '--line-color': '#' + (line?.backgroundColor ?? '000000') }"
   >
     <div class="floors" v-for="(group, i) in stops.groupedTopologicalPaths">
-      <div class="floor" v-for="(floor, j) in group.sort(northToSouth)">
+      <div
+        class="floor"
+        v-for="(floor, j) in group.sort(northToSouth)"
+        :style="{
+          gap: 12 / group.length + 'vh',
+        }"
+      >
         <div
           class="stop"
-          v-for="stop in floor"
+          v-for="(stop, k) in floor"
           :class="{
             active: nextDesservedStops.has(stop.id),
             hidden: i === 0,
@@ -117,6 +163,7 @@ watch(
           }"
         >
           <StopName
+            :compact="isStopHidden(floor, k, stop)"
             class="label"
             :char-limit="16"
             :name="stop.name"
@@ -151,9 +198,8 @@ watch(
   justify-content: space-between;
 }
 
-.floors:first-child {
-  /* FIXME: défini une largeur min et max en meme temps */
-  /* min-width: 120vh; */
+.floors:not(.compact):first-child {
+  min-width: 120vh;
 }
 
 .floor:only-child {
@@ -162,7 +208,6 @@ watch(
 
 .floor {
   display: flex;
-  gap: 5vh;
   justify-content: space-between;
 }
 

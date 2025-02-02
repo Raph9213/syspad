@@ -5,6 +5,7 @@ const props = defineProps<{
   name: string;
   charLimit: number;
   isInactive: boolean;
+  compact: boolean;
 }>();
 
 const lines = computed(() => {
@@ -40,6 +41,10 @@ const formattedName = computed(() => {
 });
 
 const width = computed(() => {
+  if (props.compact) {
+    return 0;
+  }
+
   const longestLineCharCount = Math.max(
     ...lines.value.map((line) => line.length)
   );
@@ -51,7 +56,7 @@ const width = computed(() => {
 
 <template>
   <div
-    :class="{ inactive: isInactive }"
+    :class="{ inactive: isInactive, compact }"
     :style="{
       width: width + 'vh',
     }"
@@ -76,6 +81,10 @@ span {
   font-weight: bold;
   color: var(--title-color);
   line-height: 4vh;
+}
+
+.compact span {
+  display: none;
 }
 
 .inactive span {
