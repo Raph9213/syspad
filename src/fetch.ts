@@ -2,7 +2,7 @@ import { firstUnique } from "./app/utils";
 import { Wagon, type SimpleJourney } from "./services/Wagon";
 
 export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
-  const [ORIGIN, _, LINE] = "stop_area:IDFM:71410/line/line:IDFM:C01737".split(
+  const [ORIGIN, _, LINE] = "stop_area:IDFM:71139/line/line:IDFM:C01736".split(
     "/"
   );
 
@@ -25,8 +25,8 @@ export async function nextTrainJourneys(): Promise<SimpleJourney[]> {
     console.log(stopsFromOrigin.map((x) => x.name).join(" -> "));
     result.push({
       userStopDeparture: departure,
+      ...journey,
       stops: stopsFromOrigin,
-      line: journey.line,
     });
   }
 

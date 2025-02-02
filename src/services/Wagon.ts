@@ -35,6 +35,8 @@ export type SimpleJourney = {
   line: SimpleLine;
   userStopDeparture: SimpleDeparture;
   stops: SimpleStop[];
+  closedStops: Set<string>;
+  skippedStops: Set<string>;
 };
 
 function processSVG(svg: string): string {
@@ -165,9 +167,12 @@ export class Wagon {
       );
   }
 
-  public static async journey(
-    journeyId: string
-  ): Promise<{ stops: SimpleStop[]; line: SimpleLine }> {
+  public static async journey(journeyId: string): Promise<{
+    stops: SimpleStop[];
+    line: SimpleLine;
+    closedStops: Set<string>;
+    skippedStops: Set<string>;
+  }> {
     let params = new URLSearchParams();
 
     params.append("action", "journey");
@@ -190,6 +195,19 @@ export class Wagon {
 
     const line = this.lineFromDTO(json.data.line);
 
-    return { stops, line };
+    return {
+      stops,
+      line,
+      closedStops: new Set(
+        json.data.stops
+          .filter((x: any) => x.isClosed)
+          .map((x: any) => x.stop.id)
+      ),
+      skippedStops: new Set(
+        json.data.stops
+          .filter((x: any) => x.isSkipped)
+          .map((x: any) => x.stop.id)
+      ),
+    };
   }
 }

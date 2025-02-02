@@ -31,6 +31,20 @@ const stops = computed<Graph<SimpleStop>>(() => {
   return graph;
 });
 
+const skippedStops = computed(
+  () => props.journeys.at(0)?.skippedStops || new Set<string>()
+);
+
+const closedStops = computed(() =>
+  props.journeys.reduce((acc, journey) => {
+    for (const id of journey.closedStops) {
+      acc.add(id);
+    }
+
+    return acc;
+  }, new Set<SimpleStop["id"]>())
+);
+
 const stopsInParis = computed(() => {
   return props.journeys.at(0)?.stops.filter((stop) => isInParis(stop)) || [];
 });
@@ -75,11 +89,6 @@ function isStopHidden(
   if (someStopsOutOfScreen.value === false) {
     return false;
   }
-
-  console.log(
-    i !== floor.length - 1 && !nextDesservedStops.value.has(stop.id),
-    stop.name
-  );
 
   return i !== floor.length - 1 && !nextDesservedStops.value.has(stop.id);
 }
@@ -195,7 +204,8 @@ watch(
           class="stop"
           v-for="(stop, k) in floor"
           :class="{
-            active: nextDesservedStops.has(stop.id),
+            active:
+              nextDesservedStops.has(stop.id) && !skippedStops.has(stop.id),
             hidden: i === 0,
             origin: stop.id === nextDesservedStops.values().next().value,
             terminus: stop.id === [...nextDesservedStops.values()].at(-1),
@@ -215,9 +225,11 @@ watch(
           <StopName
             :compact="isStopHidden(floor, k, stop)"
             class="label"
-            :char-limit="16"
+            :char-limit="20"
             :name="stop.name"
-            :is-inactive="!nextDesservedStops.has(stop.id)"
+            :is-inactive="
+              !nextDesservedStops.has(stop.id) || skippedStops.has(stop.id)
+            "
           ></StopName>
           <div class="anchor" :id="stop.id"></div>
           <div class="dot"></div>
