@@ -1,6 +1,6 @@
 import type { SimpleStop } from "./services/Wagon";
 
-type Point = { lat: number; lon: number };
+export type Point = { lat: number; lon: number };
 
 function isInside(p: Point, polygon: Point[]): boolean {
   let isInside = false;
@@ -48,4 +48,46 @@ export function isInParis(stop: SimpleStop): boolean {
     { lat: stop.position.lat, lon: stop.position.long },
     PARIS.map(([lon, lat]) => ({ lat, lon }))
   );
+}
+
+function radians(degree: number) {
+  let rad: number = (degree * Math.PI) / 180;
+
+  return rad;
+}
+
+function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
+  let dlat, dlon, a, c, R: number;
+
+  R = 6372.8; // km
+  dlat = radians(lat2 - lat1);
+  dlon = radians(lon2 - lon1);
+  lat1 = radians(lat1);
+  lat2 = radians(lat2);
+  a =
+    Math.sin(dlat / 2) * Math.sin(dlat / 2) +
+    Math.sin(dlon / 2) * Math.sin(dlon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  c = 2 * Math.asin(Math.sqrt(a));
+  return R * c;
+}
+
+export function nearest<T>(
+  from: Point,
+  elements: T[],
+  getPosition: (x: T) => Point
+) {
+  let nearestElement: T | null = null;
+  let nearestDistance = Infinity;
+
+  for (const element of elements) {
+    const position = getPosition(element);
+    const distance = haversine(from.lat, from.lon, position.lat, position.lon);
+
+    if (distance < nearestDistance) {
+      nearestElement = element;
+      nearestDistance = distance;
+    }
+  }
+
+  return nearestElement;
 }

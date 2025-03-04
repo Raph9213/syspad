@@ -23,7 +23,10 @@ export interface Position {
 }
 
 export interface SimpleDeparture {
-  destination: string;
+  destination: {
+    name: string;
+    averagePosition: Position;
+  };
   leavesAt: Dayjs;
   id: string;
   branchHash?: string;
@@ -149,7 +152,12 @@ export class Wagon {
     return json.data.departures
       .map((departure: any) => {
         return {
-          destination: departure.destinationLabel,
+          destination: {
+            name: departure.destinationLabel,
+            averagePosition: this.positionFromDTO(
+              departure.destination.averagePosition
+            ),
+          },
           leavesAt: dayjs(
             departure.departure.realTime ||
               departure.departure.theoretical ||

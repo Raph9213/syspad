@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computedAsync, promiseTimeout, useIntervalFn } from "@vueuse/core";
+import { promiseTimeout, useIntervalFn } from "@vueuse/core";
 import dayjs from "dayjs";
 import { ref, watch } from "vue";
 import type { SimpleDeparture } from "../services/Wagon";
@@ -40,7 +40,7 @@ useIntervalFn(() => {
         <span>Terminus</span>
         <div class="dynamicSize">
           <div style="overflow: hidden">
-            <h1>{{ departure.destination }}</h1>
+            <h1>{{ departure.destination.name }}</h1>
           </div>
         </div>
       </div>

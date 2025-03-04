@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {
-  computedAsync,
-  promiseTimeout,
-  useIntervalFn,
-  useTimeout,
-} from "@vueuse/core";
+import { promiseTimeout, useIntervalFn, useTimeout } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
 import Header from "./components/Header.vue";
 import Stops from "./components/Stops.vue";
@@ -16,18 +11,45 @@ const journeys = ref<SimpleJourney[] | null>(null);
 
 const nextDeparture = ref<SimpleDeparture | undefined>(undefined);
 
+const params = ref<{
+  currentStopId: string;
+  lineId: string;
+  terminusPosition: { lat: number; lon: number } | undefined;
+} | null>(null);
+
 const lineLogo = computed(() => journeys.value?.at(0)?.line.numberShapeSvg);
 
 const { ready: canAnimate, start: preventAnimation } = useTimeout(4000, {
   controls: true,
 });
 
+async function updateJourneys() {
+  if (params.value === null) return;
+
+  journeys.value = await nextTrainJourneys(
+    params.value.currentStopId,
+    params.value.lineId,
+    params.value.terminusPosition
+  );
+}
+
 useIntervalFn(async () => {
-  journeys.value = await nextTrainJourneys();
+  await updateJourneys();
 }, 61 * 1000);
 
 onMounted(async () => {
-  journeys.value = await nextTrainJourneys();
+  const urlParams = new URLSearchParams(window.location.search);
+  const terminusPosition = urlParams.get("to")?.split(",").map(parseFloat);
+
+  params.value = {
+    currentStopId: urlParams.get("from") ?? "",
+    lineId: urlParams.get("route") ?? "",
+    terminusPosition: terminusPosition
+      ? { lat: terminusPosition[0], lon: terminusPosition[1] }
+      : undefined,
+  };
+
+  await updateJourneys();
 });
 
 watch(
