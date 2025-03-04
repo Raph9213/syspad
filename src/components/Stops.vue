@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-import { promiseTimeout, useIntervalFn, useTimeout } from "@vueuse/core";
+import { promiseTimeout } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 import { Graph } from "../app/Graph";
+import { isInParis } from "../geo";
 import { getFixedPosition } from "../layout";
 import type { SimpleJourney, SimpleStop } from "../services/Wagon";
 import AnimatedPath from "./AnimatedPath.vue";
 import StopName from "./StopName.vue";
-import { isInParis } from "../geo";
 
 const props = defineProps<{
   journeys: SimpleJourney[];
-  start: SimpleStop["id"];
   canAnimate: boolean;
 }>();
 
@@ -36,15 +35,15 @@ const skippedStops = computed(
   () => props.journeys.at(0)?.skippedStops || new Set<string>()
 );
 
-const closedStops = computed(() =>
-  props.journeys.reduce((acc, journey) => {
-    for (const id of journey.closedStops) {
-      acc.add(id);
-    }
+// const closedStops = computed(() =>
+//   props.journeys.reduce((acc, journey) => {
+//     for (const id of journey.closedStops) {
+//       acc.add(id);
+//     }
 
-    return acc;
-  }, new Set<SimpleStop["id"]>())
-);
+//     return acc;
+//   }, new Set<SimpleStop["id"]>())
+// );
 
 const stopsInParis = computed(() => {
   return props.journeys.at(0)?.stops.filter((stop) => isInParis(stop)) || [];
@@ -203,7 +202,7 @@ watch(
     <div class="floors" v-for="(group, i) in stops.groupedTopologicalPaths">
       <div
         class="floor"
-        v-for="(floor, j) in group.sort(northToSouth)"
+        v-for="(floor, _) in group.sort(northToSouth)"
         :style="{
           gap: someStopsOutOfScreen ? '3vh' : 12 / group.length + 'vh',
         }"

@@ -2,9 +2,9 @@ import { firstUnique } from "./app/utils";
 import { nearest, type Point } from "./geo";
 import { Wagon, type SimpleJourney } from "./services/Wagon";
 
-function randomize<T>(array: T[]): T[] {
-  return array.sort(() => Math.random() - 0.5);
-}
+// function randomize<T>(array: T[]): T[] {
+//   return array.sort(() => Math.random() - 0.5);
+// }
 
 export async function nextTrainJourneys(
   currentStopId: string,
