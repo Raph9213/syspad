@@ -153,6 +153,16 @@ function updateParisCirclePosition() {
   };
 }
 
+function backgroundColor(stopId: string) {
+  if (nextDesservedStops.value.values().next().value === stopId) {
+    return "var(--title-color)";
+  }
+
+  if ([...nextDesservedStops.value.values()].at(-1) === stopId) {
+    return "white";
+  }
+}
+
 watch(
   () =>
     props.journeys
@@ -238,6 +248,7 @@ watch(
             :is-inactive="
               !nextDesservedStops.has(stop.id) || skippedStops.has(stop.id)
             "
+            :background-color="backgroundColor(stop.id)"
           ></StopName>
           <div class="anchor" :id="stop.id"></div>
           <div class="dot"></div>
