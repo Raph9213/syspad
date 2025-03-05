@@ -251,7 +251,12 @@ watch(
             :background-color="backgroundColor(stop.id)"
           ></StopName>
           <div class="anchor" :id="stop.id"></div>
-          <div class="dot"></div>
+          <div
+            class="dot"
+            :class="{
+              animated: backgroundColor(stop.id) === 'var(--title-color)',
+            }"
+          ></div>
         </div>
       </div>
     </div>
@@ -343,6 +348,23 @@ watch(
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 99;
+}
+
+.dot.animated {
+  animation: dotBounce 1.6s infinite;
+  box-shadow: 0 0 0 0.4vh var(--title-color);
+}
+
+@keyframes dotBounce {
+  0% {
+    transform: translate(-50%, -50%) scale(1.4);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.6);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.4);
+  }
 }
 
 .stop.active.terminus .dot {
