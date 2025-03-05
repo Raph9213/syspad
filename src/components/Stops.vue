@@ -376,7 +376,7 @@ watch(
 }
 
 .stop:not(.active) .dot {
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .circle {
