@@ -369,6 +369,7 @@ watch(
 
 .stop.active.terminus .dot {
   background-color: var(--line-color);
+  box-shadow: 0 0 0 0.5vh var(--line-color);
 }
 
 .stop.hidden:not(.active) {
