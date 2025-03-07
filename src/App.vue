@@ -29,7 +29,8 @@ async function updateJourneys() {
   journeys.value = await nextTrainJourneys(
     params.value.currentStopId,
     params.value.lineId,
-    params.value.terminusPosition
+    params.value.terminusPosition,
+    journeys.value || []
   );
 }
 
@@ -38,6 +39,10 @@ useIntervalFn(async () => {
 }, 61 * 1000);
 
 onMounted(async () => {
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000 * 60 * 60 * 18);
+
   const urlParams = new URLSearchParams(window.location.search);
   const terminusPosition = urlParams.get("to")?.split(",").map(parseFloat);
 

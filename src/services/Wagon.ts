@@ -35,6 +35,7 @@ export interface SimpleDeparture {
 }
 
 export type SimpleJourney = {
+  id: string;
   line: SimpleLine;
   userStopDeparture: SimpleDeparture;
   stops: SimpleStop[];
@@ -176,6 +177,7 @@ export class Wagon {
   }
 
   public static async journey(journeyId: string): Promise<{
+    id: string;
     stops: SimpleStop[];
     line: SimpleLine;
     closedStops: Set<string>;
@@ -204,6 +206,7 @@ export class Wagon {
     const line = this.lineFromDTO(json.data.line);
 
     return {
+      id: journeyId,
       stops,
       line,
       closedStops: new Set(

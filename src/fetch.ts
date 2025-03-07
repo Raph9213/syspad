@@ -1,6 +1,11 @@
+import dayjs from "dayjs";
 import { firstUnique } from "./app/utils";
 import { nearest, type Point } from "./geo";
-import { Wagon, type SimpleJourney } from "./services/Wagon";
+import {
+  Wagon,
+  type SimpleDeparture,
+  type SimpleJourney,
+} from "./services/Wagon";
 
 // function randomize<T>(array: T[]): T[] {
 //   return array.sort(() => Math.random() - 0.5);
@@ -9,7 +14,8 @@ import { Wagon, type SimpleJourney } from "./services/Wagon";
 export async function nextTrainJourneys(
   currentStopId: string,
   lineId: string,
-  terminusPosition: Point | undefined
+  terminusPosition: Point | undefined,
+  previousJourneys: SimpleJourney[]
 ): Promise<SimpleJourney[]> {
   const departures = await Wagon.departures(lineId, [currentStopId]);
 
@@ -30,10 +36,24 @@ export async function nextTrainJourneys(
     )
   );
 
+  async function getJourney(departure: SimpleDeparture) {
+    const needToRefreshFirstJourney = dayjs().minute() % 5 === 0;
+    const isFirstJourney = first.at(0)?.id === departure.id;
+
+    if (isFirstJourney && needToRefreshFirstJourney) {
+      return Wagon.journey(departure.id);
+    }
+
+    return (
+      previousJourneys.find((x) => x.id === departure.id) ||
+      Wagon.journey(departure.id)
+    );
+  }
+
   const result = [];
 
   for (const [i, departure] of first.entries()) {
-    const journey = await Wagon.journey(departure.id);
+    const journey = await getJourney(departure);
     const indexOfOrigin = journey.stops.findIndex(
       (x) => x.id === currentStopId
     );
