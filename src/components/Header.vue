@@ -45,8 +45,14 @@ useIntervalFn(() => {
         </div>
       </div>
       <div class="minutes">
-        <span>{{ remainingMinutes }}</span>
-        <label>min</label>
+        <template v-if="remainingMinutes <= 60">
+          <span>{{ remainingMinutes }}</span>
+          <label>min</label>
+        </template>
+        <span v-else>
+          {{ Math.floor(remainingMinutes / 60) }}
+          <small>h{{ remainingMinutes % 60 }}</small>
+        </span>
       </div>
     </div>
     <div class="contextual">
@@ -126,7 +132,13 @@ h1 {
 }
 
 .minutes span {
+  display: inline-flex;
+  align-items: baseline;
   font-size: 10vh;
+}
+
+.minutes small {
+  font-size: 6vh;
 }
 
 .minutes label {
