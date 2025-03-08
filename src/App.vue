@@ -6,6 +6,7 @@ import Stops from "./components/Stops.vue";
 import Time from "./components/Time.vue";
 import { nextTrainJourneys } from "./fetch";
 import type { SimpleDeparture, SimpleJourney } from "./services/Wagon";
+import RepairScreen from "./components/RepairScreen.vue";
 
 const journeys = ref<SimpleJourney[] | null>(null);
 
@@ -68,20 +69,23 @@ watch(
 </script>
 
 <template>
-  <Time class="time"></Time>
-  <div class="logo" v-if="lineLogo" v-html="lineLogo"></div>
-  <template v-if="nextDeparture">
-    <Header
-      :can-animate="canAnimate"
-      class="header"
-      :departure="nextDeparture"
-    ></Header>
-    <Stops
-      :can-animate="canAnimate"
-      v-if="journeys"
-      :journeys="journeys"
-    ></Stops>
+  <template v-if="lineLogo">
+    <Time class="time"></Time>
+    <div class="logo" v-html="lineLogo"></div>
+    <template v-if="nextDeparture">
+      <Header
+        :can-animate="canAnimate"
+        class="header"
+        :departure="nextDeparture"
+      ></Header>
+      <Stops
+        :can-animate="canAnimate"
+        v-if="journeys"
+        :journeys="journeys"
+      ></Stops>
+    </template>
   </template>
+  <RepairScreen v-else></RepairScreen>
 </template>
 
 <style scoped>
