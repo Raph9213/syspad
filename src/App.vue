@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { promiseTimeout, useIntervalFn, useTimeout } from "@vueuse/core";
+import {
+  promiseTimeout,
+  useDocumentVisibility,
+  useIntervalFn,
+  useTimeout,
+} from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
 import Header from "./components/Header.vue";
 import Stops from "./components/Stops.vue";
@@ -7,6 +12,7 @@ import Time from "./components/Time.vue";
 import { nextTrainJourneys } from "./fetch";
 import type { SimpleDeparture, SimpleJourney } from "./services/Wagon";
 import RepairScreen from "./components/RepairScreen.vue";
+import dayjs from "dayjs";
 
 const journeys = ref<SimpleJourney[] | null>(null);
 
@@ -24,8 +30,12 @@ const { ready: canAnimate, start: preventAnimation } = useTimeout(4000, {
   controls: true,
 });
 
+const visibility = useDocumentVisibility();
+const lastUpdate = ref(dayjs());
+
 async function updateJourneys() {
   if (params.value === null) return;
+  if (visibility.value !== "visible") return;
 
   journeys.value = await nextTrainJourneys(
     params.value.currentStopId,
@@ -33,6 +43,7 @@ async function updateJourneys() {
     params.value.terminusPosition,
     journeys.value || []
   );
+  lastUpdate.value = dayjs();
 }
 
 useIntervalFn(async () => {
@@ -66,6 +77,15 @@ watch(
     nextDeparture.value = journeys.value?.at(0)?.userStopDeparture;
   }
 );
+
+watch(visibility, async (value) => {
+  if (
+    value === "visible" &&
+    lastUpdate.value.isBefore(dayjs().subtract(1, "minute"))
+  ) {
+    await updateJourneys();
+  }
+});
 </script>
 
 <template>
