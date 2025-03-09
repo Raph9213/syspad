@@ -14,6 +14,7 @@ const remainingMinutes = ref(-1);
 const contextActive = ref(false);
 const titleActive = ref(false);
 const position = ref<"farAway" | "approaching" | "atPlatform">("farAway");
+const minutesZoomedIn = ref(false);
 
 function updatePosition() {
   if (props.departure.arrivesAt.isBefore(dayjs())) {
@@ -36,13 +37,22 @@ watch(
       contextActive.value = false;
       titleActive.value = false;
     }
-  }
+  },
+  { immediate: true }
 );
 
-useIntervalFn(() => {
-  remainingMinutes.value = props.departure.arrivesAt.diff(dayjs(), "minute");
+useIntervalFn(async () => {
+  const newRemainingMinutes = props.departure.arrivesAt.diff(dayjs(), "minute");
+
+  if (newRemainingMinutes !== remainingMinutes.value) {
+    minutesZoomedIn.value = true;
+    await promiseTimeout(1000);
+    remainingMinutes.value = newRemainingMinutes;
+    minutesZoomedIn.value = false;
+  }
+
   updatePosition();
-}, 1000);
+}, 3000);
 </script>
 
 <template>
@@ -62,7 +72,9 @@ useIntervalFn(() => {
           à l'approche
         </span>
         <template v-else-if="remainingMinutes <= 60">
-          <span>{{ Math.max(0, remainingMinutes) }}</span>
+          <span class="zoomable" :class="{ minutesZoomedIn }">{{
+            Math.max(0, remainingMinutes)
+          }}</span>
           <label>min</label>
         </template>
         <span v-else>
@@ -166,6 +178,16 @@ h1 {
 .minutes .textual {
   padding: 0 4vh;
   font-size: 7vh;
+}
+
+.zoomable {
+  transition: transform 1s ease-out;
+  transition-duration: 0s;
+}
+
+.minutesZoomedIn {
+  transition-duration: 1s;
+  transform: scale(1.25);
 }
 
 .contextual {
