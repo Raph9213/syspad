@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import dayjs from "dayjs";
 import { promiseTimeout } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 import { Graph } from "../app/Graph";
@@ -81,6 +82,29 @@ const nextDesservedStops = computed(() => {
 
   return stops;
 });
+
+const otherFinalStations = computed(() => {
+  return props.journeys.slice(1).map((journey) => {
+    const finalStop = journey.stops.at(-1);
+    if (!finalStop) {
+      return null;
+    }
+    const minutes = journey.userStopDeparture.leavesAt.diff(dayjs(), "minute");
+
+    return {
+      finalStopId: finalStop.id,
+      minutes,
+      destination: journey.userStopDeparture.destination.name,
+    };
+  }).filter(Boolean);
+});
+
+function otherJourneyMinutesIfAny(stopId: string) {
+  const found = otherFinalStations.value.find(
+    (x) => x?.finalStopId === stopId
+  );
+  return found ? found.minutes : null;
+}
 
 function isStopHidden(
   floor: SimpleStop[],
@@ -262,7 +286,16 @@ watch(
             :class="{
               animated: backgroundColor(stop.id) === 'var(--title-color)',
             }"
-          ></div>
+            style="margin-left: 2vh;"
+          >
+            <div 
+              v-if="otherJourneyMinutesIfAny(stop.id) !== null"
+              class="smallMinutesBubble"
+            >
+              <span style="font-size: 4.5vh; line-height: 1;">{{ otherJourneyMinutesIfAny(stop.id) }}</span>
+              <span style="font-size: 2vh;">min</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -405,5 +438,21 @@ watch(
   font-size: 5vh;
   margin-top: 30vh;
   color: var(--gray);
+}
+
+.smallMinutesBubble {
+  position: absolute;
+  left: 8vh;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: black;
+  color: var(--time-color, #FFBE00);
+  padding: 1vh 2vh;
+  font-size: 3vh;
+  border-radius: 1vh;
+  font-weight: bold;
 }
 </style>

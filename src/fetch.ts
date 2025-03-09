@@ -61,6 +61,18 @@ export async function nextTrainJourneys(
       indexOfOrigin <= 0 || i === 0 ? indexOfOrigin : indexOfOrigin - 1
     );
     console.log(stopsFromOrigin.map((x) => x.name).join(" -> "));
+
+    // Only print for the OTHER trains, not the first one
+    if (i > 0) {
+      const diffMinutes = departure.leavesAt.diff(dayjs(), "minute");
+      const diffMinutesFormatted = diffMinutes < 0 ? "now" : `${diffMinutes}m`;
+      console.log(
+        `${departure.destination.name} in ${diffMinutesFormatted} (${departure.leavesAt.format(
+          "HH:mm"
+        )})`
+      );
+    }
+
     result.push({
       userStopDeparture: departure,
       ...journey,
