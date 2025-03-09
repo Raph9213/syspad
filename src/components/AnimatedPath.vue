@@ -10,6 +10,8 @@ const props = defineProps<{
   isAnimated: boolean;
   /** Path with gray background used when stops are not desserved */
   isInactive: boolean;
+  /** Colored path without animation when no realtime data is available */
+  static: boolean;
   canAnimate: boolean;
 }>();
 
@@ -87,7 +89,7 @@ watch(
 
 <template>
   <svg
-    :class="{ animated: isAnimated }"
+    :class="{ animated: isAnimated && !static }"
     :width="width"
     :height="height"
     :style="{ zIndex: props.isAnimated ? 3 : 0, '--path-length': pathLength }"
@@ -95,7 +97,7 @@ watch(
     <path
       :d="path"
       fill="none"
-      :stroke="props.isAnimated ? primaryColor : tertiaryColor"
+      :stroke="isAnimated || static ? primaryColor : tertiaryColor"
       stroke-width="6vh"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -104,7 +106,7 @@ watch(
   </svg>
 
   <svg
-    v-if="isAnimated && !firstAnimationFinished"
+    v-if="isAnimated && !firstAnimationFinished && !static"
     :width="width"
     :height="height"
     style="z-index: 2"
@@ -121,7 +123,7 @@ watch(
   </svg>
 
   <svg
-    v-if="isAnimated && firstAnimationFinished"
+    v-if="isAnimated && firstAnimationFinished && !static"
     class="gradient"
     :width="width"
     :height="height"
@@ -145,7 +147,7 @@ watch(
   </svg>
 
   <svg
-    v-if="isAnimated && firstAnimationFinished"
+    v-if="isAnimated && firstAnimationFinished && !static"
     class="gradientBackground"
     :width="width"
     :height="height"

@@ -46,7 +46,7 @@ useIntervalFn(() => {
       </div>
       <div class="minutes">
         <template v-if="remainingMinutes <= 60">
-          <span>{{ remainingMinutes }}</span>
+          <span>{{ Math.max(0, remainingMinutes) }}</span>
           <label>min</label>
         </template>
         <span v-else>

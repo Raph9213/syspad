@@ -11,6 +11,7 @@ import StopName from "./StopName.vue";
 const props = defineProps<{
   journeys: SimpleJourney[];
   canAnimate: boolean;
+  static: boolean;
 }>();
 
 const paths = ref<
@@ -86,7 +87,7 @@ function isStopHidden(
   i: number,
   stop: SimpleStop
 ): boolean {
-  if (someStopsOutOfScreen.value === false) {
+  if (someStopsOutOfScreen.value === false || props.static) {
     return false;
   }
 
@@ -158,7 +159,10 @@ function backgroundColor(stopId: string) {
     return "var(--title-color)";
   }
 
-  if ([...nextDesservedStops.value.values()].at(-1) === stopId) {
+  if (
+    [...nextDesservedStops.value.values()].at(-1) === stopId &&
+    !props.static
+  ) {
     return "white";
   }
 }
@@ -190,6 +194,7 @@ watch(
       :is-animated="i === 0 && canAnimate"
       :is-inactive="false"
       :can-animate="canAnimate"
+      :static="static"
       v-for="(path, i) in paths"
     ></AnimatedPath>
   </div>
@@ -206,7 +211,7 @@ watch(
   </div>
   <div
     class="groups"
-    :class="{ compact: someStopsOutOfScreen, hidden: !canAnimate }"
+    :class="{ compact: someStopsOutOfScreen, hidden: !canAnimate, static }"
     :style="{ '--line-color': '#' + (line?.backgroundColor ?? '000000') }"
   >
     <div class="floors" v-for="(group, i) in stops.groupedTopologicalPaths">
@@ -246,7 +251,8 @@ watch(
             :char-limit="20"
             :name="stop.name"
             :is-inactive="
-              !nextDesservedStops.has(stop.id) || skippedStops.has(stop.id)
+              (!nextDesservedStops.has(stop.id) || skippedStops.has(stop.id)) &&
+              !static
             "
             :background-color="backgroundColor(stop.id)"
           ></StopName>
@@ -367,7 +373,7 @@ watch(
   }
 }
 
-.stop.active.terminus .dot {
+.groups:not(.static) .stop.active.terminus .dot {
   background-color: var(--line-color);
   box-shadow: 0 0 0 0.5vh var(--line-color);
 }
@@ -376,7 +382,7 @@ watch(
   visibility: hidden;
 }
 
-.stop:not(.active) .dot {
+.groups:not(.static) .stop:not(.active) .dot {
   opacity: 0.2;
 }
 
