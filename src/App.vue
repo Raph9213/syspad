@@ -163,10 +163,10 @@ watch(visibility, async (value) => {
 }
 
 .shortTrainBubble.right {
-  left: 50vh;
+  left: 20vh;
 }
 
 .shortTrainBubble.left {
-  right: 50vh;
+  right: 20vh;
 }
 </style>

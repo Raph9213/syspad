@@ -199,12 +199,12 @@ section.reversed {
 }
 
 .text.right {
-  left: 120vh;
+  left: 90vh;
   transform: translateX(-50%);
 }
 
 .text.left {
-  right: 120vh;
+  right: 90vh;
   transform: translateX(50%);
 }
 
