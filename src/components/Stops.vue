@@ -106,6 +106,21 @@ function otherJourneyMinutesIfAny(stopId: string) {
   return found ? found.minutes : null;
 }
 
+function isPhysicalBranchEnd(stopId: string): boolean {
+  const successors = stops.value.adjacencyList.get(stopId) ?? new Set()
+  return successors.size === 0
+}
+
+function bubblePlacement(stopId: string): "bubbleRight" | "bubbleBelow" | "" {
+  if (otherJourneyMinutesIfAny(stopId) === null) {
+    return ""
+  }
+  if (isPhysicalBranchEnd(stopId)) {
+    return "bubbleRight"
+  }
+  return "bubbleBelow"
+}
+
 function isStopHidden(
   floor: SimpleStop[],
   i: number,
@@ -289,11 +304,12 @@ watch(
             style="margin-left: 2vh;"
           >
             <div 
-              v-if="otherJourneyMinutesIfAny(stop.id) !== null"
+              v-if="otherJourneyMinutesIfAny(stop.id) !== null && otherJourneyMinutesIfAny(stop.id) <= 60"
               class="smallMinutesBubble"
+              :class="bubblePlacement(stop.id)"
             >
-              <span style="font-size: 4.5vh; line-height: 1;">{{ otherJourneyMinutesIfAny(stop.id) }}</span>
-              <span style="font-size: 2vh;">min</span>
+                <div style="font-size: 4.5vh;">{{ otherJourneyMinutesIfAny(stop.id) }}</div>
+                <div style="font-size: 2vh; opacity: 0.7; text-align: center;">min</div>
             </div>
           </div>
         </div>
@@ -442,17 +458,22 @@ watch(
 
 .smallMinutesBubble {
   position: absolute;
-  left: 8vh;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background-color: black;
   color: var(--time-color, #FFBE00);
   padding: 1vh 2vh;
-  font-size: 3vh;
   border-radius: 1vh;
-  font-weight: bold;
+  text-align: center;
+}
+
+.bubbleRight {
+  top: 50%;
+  left: calc(100% + 1vh);
+  transform: translateY(-50%);
+}
+
+.bubbleBelow {
+  top: calc(100% + 2vh);
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 </style>
