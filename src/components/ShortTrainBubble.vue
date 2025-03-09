@@ -195,6 +195,7 @@ section.reversed {
 .text {
   position: fixed;
   top: 7vh;
+  font-size: 4vh;
 }
 
 .text.right {
@@ -209,6 +210,7 @@ section.reversed {
 
 h1 {
   margin: 0;
+  margin-bottom: 1vh;
   font-weight: normal;
   font-size: 10vh;
 }
@@ -239,8 +241,9 @@ li {
 
 .train {
   height: 47vh;
+  width: auto;
   position: absolute;
-  left: 40%;
+  left: calc(50% + 10vh);
   top: calc(50% - 6vh);
   animation: trainMove 7s infinite ease;
 }
@@ -251,15 +254,15 @@ li {
     opacity: 1;
   }
   50% {
-    transform: translateX(60vh);
+    transform: translateX(120%);
     opacity: 1;
   }
   52% {
-    transform: translateX(60vh);
+    transform: translateX(120%);
     opacity: 0;
   }
-  60% {
-    transform: translateX(0vh);
+  53% {
+    transform: translateX(-4%);
     opacity: 0;
   }
   70% {
@@ -274,6 +277,8 @@ li {
   left: calc(50% - 30vh);
   top: calc(50% + 5vh);
   height: 26vh;
+  width: auto;
+  overflow: visible;
 }
 
 .arrows path:first-child {
@@ -289,10 +294,10 @@ li {
     transform: translateX(0);
   }
   20% {
-    transform: translateX(-8vh);
+    transform: translateX(-20%);
   }
   40% {
-    transform: translateX(-8vh);
+    transform: translateX(-20%);
   }
   60% {
     transform: translateX(0);
@@ -304,6 +309,7 @@ li {
   left: calc(50% - 30vh);
   top: calc(50% + 8vh);
   height: 35vh;
+  width: auto;
 }
 
 .human #legLeft {
@@ -402,24 +408,25 @@ li {
 }
 
 .human {
-  animation: humanMove 7s infinite 4s linear;
+  animation: humanMove 7s infinite 2s linear;
+  overflow: visible;
 }
 
 @keyframes humanMove {
   0% {
-    transform: translateX(-30vh);
+    transform: translateX(-260%);
     opacity: 1;
   }
   50% {
-    transform: translateX(40vh);
+    transform: translateX(200%);
     opacity: 1;
   }
   52% {
-    transform: translateX(40vh);
+    transform: translateX(200%);
     opacity: 0;
   }
   100% {
-    transform: translateX(-30vh);
+    transform: translateX(-260%);
     opacity: 0;
   }
 }
