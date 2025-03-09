@@ -28,6 +28,7 @@ export interface SimpleDeparture {
     averagePosition: Position;
   };
   leavesAt: Dayjs;
+  arrivesAt: Dayjs;
   id: string;
   branchHash?: string;
   journeyCode?: string;
@@ -162,6 +163,11 @@ export class Wagon {
           leavesAt: dayjs(
             departure.departure.realTime ||
               departure.departure.theoretical ||
+              "invalid"
+          ),
+          arrivesAt: dayjs(
+            departure.arrival.realTime ||
+              departure.arrival.theoretical ||
               "invalid"
           ),
           id: departure.journeyId,

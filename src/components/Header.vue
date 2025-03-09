@@ -13,6 +13,17 @@ const remainingMinutes = ref(-1);
 
 const contextActive = ref(false);
 const titleActive = ref(false);
+const position = ref<"farAway" | "approaching" | "atPlatform">("farAway");
+
+function updatePosition() {
+  if (props.departure.arrivesAt.isBefore(dayjs())) {
+    position.value = "atPlatform";
+  } else if (remainingMinutes.value <= 0) {
+    position.value = "approaching";
+  } else {
+    position.value = "farAway";
+  }
+}
 
 watch(
   () => props.canAnimate,
@@ -29,7 +40,8 @@ watch(
 );
 
 useIntervalFn(() => {
-  remainingMinutes.value = props.departure.leavesAt.diff(dayjs(), "minute");
+  remainingMinutes.value = props.departure.arrivesAt.diff(dayjs(), "minute");
+  updatePosition();
 }, 1000);
 </script>
 
@@ -45,7 +57,11 @@ useIntervalFn(() => {
         </div>
       </div>
       <div class="minutes">
-        <template v-if="remainingMinutes <= 60">
+        <span class="textual" v-if="position === 'atPlatform'">à quai</span>
+        <span class="textual" v-else-if="position === 'approaching'">
+          à l'approche
+        </span>
+        <template v-else-if="remainingMinutes <= 60">
           <span>{{ Math.max(0, remainingMinutes) }}</span>
           <label>min</label>
         </template>
@@ -120,7 +136,7 @@ h1 {
   justify-content: center;
   align-items: center;
   background-color: black;
-  width: 20vh;
+  min-width: 20vh;
   color: var(--time-color, yellow);
   border-radius: 0 1vh 1vh 0;
   transform: translateX(-100%);
@@ -145,6 +161,11 @@ h1 {
   margin-top: -1vh;
   font-size: 4vh;
   opacity: 0.7;
+}
+
+.minutes .textual {
+  padding: 0 4vh;
+  font-size: 7vh;
 }
 
 .contextual {
