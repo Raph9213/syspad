@@ -25,5 +25,6 @@ body {
 :root {
     --title-color: #1C55B1;
     --time-color: #FFBE00;
+    --warning-color: rgb(255, 205, 0);
     --gray: #565759;
 }

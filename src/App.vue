@@ -14,6 +14,7 @@ import type { SimpleDeparture, SimpleJourney } from "./services/Wagon";
 import RepairScreen from "./components/RepairScreen.vue";
 import dayjs from "dayjs";
 import OfflineHeader from "./components/OfflineHeader.vue";
+import ShortTrainBubble from "./components/ShortTrainBubble.vue";
 
 const journeys = ref<SimpleJourney[] | null>(null);
 
@@ -23,6 +24,7 @@ const params = ref<{
   currentStopId: string;
   lineId: string;
   terminusPosition: { lat: number; lon: number } | undefined;
+  shortTrainMessage?: "right" | "left" | string;
 } | null>(null);
 
 const lineLogo = computed(() => journeys.value?.at(0)?.line.numberShapeSvg);
@@ -72,6 +74,7 @@ onMounted(async () => {
     terminusPosition: terminusPosition
       ? { lat: terminusPosition[0], lon: terminusPosition[1] }
       : undefined,
+    shortTrainMessage: urlParams.get("shortTrainMessage") ?? undefined,
   };
 
   await updateJourneys();
@@ -117,6 +120,15 @@ watch(visibility, async (value) => {
         v-if="journeys"
         :journeys="journeys"
       ></Stops>
+      <ShortTrainBubble
+        v-if="
+          nextDeparture.vehicleLength === 'SHORT' &&
+          ['left', 'right'].includes(params?.shortTrainMessage ?? '')
+        "
+        :walk-to="params?.shortTrainMessage === 'right' ? 'right' : 'left'"
+        class="shortTrainBubble"
+        :class="params?.shortTrainMessage"
+      ></ShortTrainBubble>
     </template>
   </template>
   <RepairScreen v-else></RepairScreen>
@@ -142,5 +154,19 @@ watch(visibility, async (value) => {
   top: -4vh;
   left: -4vh;
   height: 40vh;
+}
+
+.shortTrainBubble {
+  position: fixed;
+  top: -20vh;
+  z-index: 999;
+}
+
+.shortTrainBubble.right {
+  left: 50vh;
+}
+
+.shortTrainBubble.left {
+  right: 50vh;
 }
 </style>
